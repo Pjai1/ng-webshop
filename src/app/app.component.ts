@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'webshop-app';
+  openPanel: boolean = true;
+  openTable: boolean = false;
+
+  toggleTableAndPanelView(): void {
+    this.openPanel = !!!this.openPanel;
+    this.openTable = !!!this.openTable;
+  }
 }

@@ -1,0 +1,36 @@
+
+    <div class="col-sm-12">
+        
+        <table class="table">
+            <thead>
+                <th>
+                    Id
+                </th>
+                <th>
+                    Sku
+                </th>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    BasePrice
+                </th>
+                <th>
+                    Stocked
+                </th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let product of products">
+                    <td>{{product.id}}</td>
+                    <td>{{product.sku}}</td>
+                    <td>{{product.title}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.basePrice}}</td>
+                    <td>{{product.stocked}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
