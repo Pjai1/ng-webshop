@@ -27,8 +27,8 @@
                     <td>{{product.id}}</td>
                     <td>{{product.sku}}</td>
                     <td>{{product.title}}</td>
-                    <td>{{product.price}}</td>
-                    <td>{{product.basePrice}}</td>
+                    <td>{{product.price | currency:'EUR':symbol:'2.0-0'}}</td>
+                    <td>{{product.basePrice | currency:'EUR':symbol:'2.0-0'}}</td>
                     <td>{{product.stocked}}</td>
                 </tr>
             </tbody>
