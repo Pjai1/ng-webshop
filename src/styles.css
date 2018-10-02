@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+/*CSS GRID CLASSES*/
+.container-grid {
+    display: grid;
+    grid-gap: 20px;
+    justify-items: center;
+    padding: 15px;
+}
+
+.row-grid {
+    display: grid;
+
+}

@@ -1,11 +1,22 @@
-.btn {
-    margin-bottom: 15px;
+.container-grid {
+    height: 50rem;
+    overflow: scroll;
+
+    .row-grid {
+        grid-template-columns: 300px;
+    
+        .btn-primary:hover {
+            cursor: pointer;
+        }
+    
+        .btnOne {
+            margin-bottom: 10px;
+        }
+    
+        .fas {
+            padding-right: 5px;
+        }
+    }
 }
 
-.btnOne {
-    margin-right: 15px;
-}
 
-.container {
-    margin-top: 15px;
-}

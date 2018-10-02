@@ -1,9 +1,15 @@
-<div class="container">
-  <div class="row">
-      <button type="button" class="btn btn-primary btnOne" (click)="toggleTableAndPanelView()">Table View</button>
-      <button type="button" class="btn btn-primary" (click)="toggleTableAndPanelView()">Panel View</button>
-    </div>
-      <panel-view *ngIf="openPanel"></panel-view>
-      <table-view *ngIf="openTable"></table-view>
+<div class="container-grid" infiniteScroll
+[infiniteScrollDistance]="2"
+[infiniteScrollThrottle]="50">
+  <div class="row-grid">
+      <button type="button" class="btn btn-primary btnOne" (click)="toggleTableAndPanelView()">
+          <i class="fas fa-table"></i>Table View
+      </button>
+      <button type="button" class="btn btn-primary" (click)="toggleTableAndPanelView()">
+          <i class="fas fa-columns"></i>Panel View
+      </button>
+  </div>
+    <panel-view *ngIf="openPanel"></panel-view>
+    <table-view *ngIf="openTable"></table-view>
 </div>
 
