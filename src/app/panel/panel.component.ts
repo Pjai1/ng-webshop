@@ -16,8 +16,7 @@ export class PanelComponent implements OnInit {
 
     constructor(private productService: ProductService, private toastr: ToastrService){}
 
-    ngOnInit(): void{
-        console.log('panel is live');
+    ngOnInit(): void {
         this.showPanel();
     }
 
@@ -30,7 +29,6 @@ export class PanelComponent implements OnInit {
             .pipe(first())
             .subscribe((data: any) => {
                 this.products = data.selectedProducts;
-                console.log("Products Retrieved "+ JSON.stringify(this.products));
             }, (error: HttpErrorResponse) => {
                 this.toastr.error(<any>error.message, "Error Occurred with status "+<any>error.status);
             });

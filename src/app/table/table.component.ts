@@ -17,7 +17,6 @@ export class TableComponent implements OnInit {
     constructor(private productService: ProductService, private toastr: ToastrService){}
 
     ngOnInit(): void {
-        console.log('table is live');
         this.showTable();
     }
 
@@ -30,7 +29,6 @@ export class TableComponent implements OnInit {
             .pipe(first())
             .subscribe((data: any) => {
                 this.products = data.selectedProducts;
-                console.log("Products Retrieved "+ JSON.stringify(this.products));
             },
             (error: HttpErrorResponse) => {
                 this.toastr.error(<any>error.message, "Error Occurred with status "+<any>error.status);
