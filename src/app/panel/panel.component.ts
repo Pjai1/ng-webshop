@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { ProductService } from "../services/product.service";
 import { first } from "rxjs/operators";
 import { Product } from "../shared/models/product.model";
+import { HttpErrorResponse } from "@angular/common/http";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
     selector: 'panel-view',
@@ -12,7 +14,7 @@ import { Product } from "../shared/models/product.model";
 export class PanelComponent implements OnInit {
     private products: Product[] = [];
 
-    constructor(private productService: ProductService){}
+    constructor(private productService: ProductService, private toastr: ToastrService){}
 
     ngOnInit(): void{
         console.log('panel is live');
@@ -29,6 +31,8 @@ export class PanelComponent implements OnInit {
             .subscribe((data: any) => {
                 this.products = data.selectedProducts;
                 console.log("Products Retrieved "+ JSON.stringify(this.products));
+            }, (error: HttpErrorResponse) => {
+                this.toastr.error(<any>error.message, "Error Occurred with status "+<any>error.status);
             });
     }
 }
