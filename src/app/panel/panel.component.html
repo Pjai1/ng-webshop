@@ -1,14 +1,15 @@
-
-    <div class="col-sm-12">
-        <div *ngFor="let product of products" class="card">
+<div class="row">
+    <div *ngFor="let product of products" class="col-md-4">
+        <div class="card">
             <img class="card-img-top" src="{{product.image}}" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title">{{product.title}}</h5>
-                <p class="card-text">Product Id: {{product.id}}</p>
-                <p class="card-text">Product Sku: {{product.sku}}</p>
-                <p class="card-text">Product Desc: {{product.desc}}</p>
-                <p class="card-text">Product Stocked: {{product.stocked}}</p>
-                <p class="card-text">Product Price: {{product.price | currency:'EUR':symbol:'2.0-0'}}</p>
+                <p class="card-text"><b>Product Id:</b> {{product.id}}</p>
+                <p class="card-text"><b>Product Sku:</b> {{product.sku}}</p>
+                <p class="card-text"><b>Product Desc:</b> {{product.desc}}</p>
+                <p class="card-text"><b>Product Stocked:</b> {{product.stocked}}</p>
+                <p class="card-text"><b>Product Price:</b> {{product.price | currency:'EUR':symbol:'2.0-0'}}</p>
             </div>
         </div>
     </div>
+</div>
