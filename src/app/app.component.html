@@ -3,11 +3,7 @@
       <button type="button" class="btn btn-primary btnOne" (click)="toggleTableAndPanelView()">Table View</button>
       <button type="button" class="btn btn-primary" (click)="toggleTableAndPanelView()">Panel View</button>
     </div>
-    <div class="row">
       <panel-view *ngIf="openPanel"></panel-view>
-    </div>
-    <div class="row">
       <table-view *ngIf="openTable"></table-view>
-    </div>
 </div>
 
