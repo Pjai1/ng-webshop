@@ -2,14 +2,14 @@
 [infiniteScrollDistance]="2"
 [infiniteScrollThrottle]="50">
   <div class="row-grid">
-      <button type="button" class="btn btn-primary btnOne" (click)="toggleTableAndPanelView()">
+      <button type="button" class="btn btn-primary btnOne" (click)="toggleViews()">
           <i class="fas fa-table"></i>Table View
       </button>
-      <button type="button" class="btn btn-primary" (click)="toggleTableAndPanelView()">
+      <button type="button" class="btn btn-primary" (click)="toggleViews()">
           <i class="fas fa-columns"></i>Panel View
       </button>
   </div>
     <panel-view *ngIf="openPanel"></panel-view>
-    <table-view *ngIf="openTable"></table-view>
+    <table-view *ngIf="!openPanel"></table-view>
 </div>
 

@@ -1,37 +1,31 @@
-import { Component, OnInit } from "@angular/core";
-import { ProductService } from "../services/product.service";
-import { first } from "rxjs/operators"
-import { Product } from "../shared/models/product.model";
-import { HttpErrorResponse } from "@angular/common/http";
-import { ToastrService } from "ngx-toastr";
+import { Component, OnInit } from '@angular/core';
+import { ProductService } from '../services/product.service';
+import { first } from 'rxjs/operators';
+import { Product } from '../shared/models/product.model';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
-    selector: 'table-view',
-    templateUrl: './table.component.html',
-    styleUrls: ['./table.component.scss']
+  selector: 'table-view',
+  templateUrl: './table.component.html',
+  styleUrls: ['./table.component.scss'],
 })
-
 export class TableComponent implements OnInit {
-    private products: Product[] = [];
+  private products: Product[] = [];
 
-    constructor(private productService: ProductService, private toastr: ToastrService){}
+  constructor(private productService: ProductService, private toastr: ToastrService) {}
 
-    ngOnInit(): void {
-        this.showTable();
-    }
+  ngOnInit(): void {
+    this.showTable();
+  }
 
-    showTable(): void {
-        this.getProducts();
-    }
+  showTable(): void {
+    this.getProducts();
+  }
 
-    getProducts(): void { 
-        this.productService.getProducts()
-            .pipe(first())
-            .subscribe((data: any) => {
-                this.products = data.selectedProducts;
-            },
-            (error: HttpErrorResponse) => {
-                this.toastr.error(<any>error.message, "Error Occurred with status "+<any>error.status);
-            });
-    }
+  getProducts(): void {
+    this.productService.getProducts().subscribe((data: any) => {
+      this.products = data.selectedProducts;
+    });
+  }
 }

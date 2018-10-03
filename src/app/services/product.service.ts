@@ -1,29 +1,41 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { environment } from "../../environments/environment";
-import { throwError, Observable } from "rxjs";
-import { catchError } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Product } from '../shared/models/product.model';
+
+export interface IProductDto {
+  total: number;
+  page: number;
+  pageSize: number;
+  selectedProducts: [
+    {
+      id: string;
+      sku: string;
+      title: string;
+      price: number;
+      basePrice: number;
+      stocked: boolean;
+      image: string;
+      desc: string;
+    }
+  ];
+}
 
 @Injectable()
 export class ProductService {
-    private productUrl: string = environment.apiUrl;
+  private productUrl: string = environment.apiUrl;
 
-    constructor(private http: HttpClient){}
+  constructor(private http: HttpClient) {}
 
-    getProducts(): Observable<Object>{
-        return this.http.get(this.productUrl)
-            .pipe(
-                catchError(this.handleError)
-            );
-    }
-
-    private handleError(error: HttpErrorResponse): Observable<HttpErrorResponse> {
-        if (error.error instanceof ErrorEvent) {
-            console.error("Error occurred: "+error.error.message);
-        } else {
-            console.error(`Http Error with status code ${error.status} and body ${JSON.stringify(error.error)}`);
-        }
-
-        return throwError(error);
-    }
+  getProducts(): Observable<Product[]> {
+    return this.http.get<IProductDto>(this.productUrl).pipe(
+      map((data) => {
+        return data.selectedProducts.map((dto) => {
+          return new Product(<any>dto);
+        });
+      }),
+    );
+  }
 }

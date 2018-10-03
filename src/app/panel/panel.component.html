@@ -8,6 +8,7 @@
                 <p class="card-text"><b>Product Sku:</b> {{product.sku}}</p>
                 <p class="card-text"><b>Product Desc:</b> {{product.desc}}</p>
                 <p class="card-text"><b>Product Stocked:</b> {{product.stocked}}</p>
+                <p class="card-text"><b>Discount:</b> {{product.getDiscount()}}</p>
                 <p class="card-text"><b>Product Price:</b> {{product.price | currency:'EUR':symbol:'1.0-1'}}</p>
             </div>
         </div>
