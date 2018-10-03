@@ -1,38 +1,39 @@
 import { ProductService } from './product.service';
-import { Product } from '../shared/models/product.model';
 import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { async } from '@angular/core/testing';
 
 describe('Product Service', () => {
   let service: ProductService;
-  let httpClientSpy: { get: jasmine.Spy };
+  const httpClientSpy = { get: jest.fn() };
 
   beforeEach(() => {
-    httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
+    // httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
     service = new ProductService(<any>httpClientSpy);
   });
 
   it('should return products', async(() => {
-    const expectedProducts: any = [
-      {
-        id: '123',
-        sku: '4789',
-        stocked: true,
-        desc: 'Our best product!',
-        title: 'Truly the best lawn-mower',
-        price: 12.9,
-        basePrice: 10,
-        image: 'https://bestimageever.png',
-      },
-    ];
+    const expectedProducts: any = {
+      selectedProducts: [
+        {
+          id: '123',
+          sku: '4789',
+          stocked: true,
+          desc: 'Our best product!',
+          title: 'Truly the best lawn-mower',
+          price: 12.9,
+          basePrice: 10,
+          image: 'https://bestimageever.png',
+        },
+      ],
+    };
 
-    httpClientSpy.get.and.returnValue(of(expectedProducts));
+    httpClientSpy.get.mockReturnValue(of(expectedProducts));
 
-    service
-      .getProducts()
-      .subscribe((products) => expect(products).toEqual(expectedProducts, 'Expected products'), fail);
-    expect(httpClientSpy.get.calls.count()).toBe(1, 'Called once');
+    service.getProducts().subscribe((products) => {
+      expect(products).toEqual(expectedProducts.selectedProducts);
+    });
+    expect(httpClientSpy.get.mock.calls.length).toBe(1);
   }));
 
   it('should return an error when the server returns a 404', () => {
@@ -42,7 +43,7 @@ describe('Product Service', () => {
       statusText: 'Not Found',
     });
 
-    httpClientSpy.get.and.returnValue(throwError(errorResponse));
+    httpClientSpy.get.mockReturnValue(throwError(errorResponse));
 
     service
       .getProducts()

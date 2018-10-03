@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./table.component.scss'],
 })
 export class TableComponent implements OnInit {
-  private products: Product[] = [];
+  products: Product[] = [];
 
   constructor(private productService: ProductService, private toastr: ToastrService) {}
 
@@ -25,7 +25,7 @@ export class TableComponent implements OnInit {
 
   getProducts(): void {
     this.productService.getProducts().subscribe((data: any) => {
-      this.products = data.selectedProducts;
+      this.products = data;
     });
   }
 }

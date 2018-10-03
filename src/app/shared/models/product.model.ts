@@ -15,6 +15,6 @@ export class Product {
   }
 
   getDiscount(): number {
-    return this.price / this.basePrice;
+    return Math.round((1 - this.price / this.basePrice) * 100);
   }
 }

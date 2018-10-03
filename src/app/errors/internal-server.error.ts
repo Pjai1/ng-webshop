@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class InternalServerError extends Error {
   details: any;
 
-  constructor(status: number, statusText: string, error?: any) {
+  constructor(public status: number, public statusText: string, error?: any) {
     super();
 
     if (Error.captureStackTrace) {
@@ -19,7 +19,5 @@ export class InternalServerError extends Error {
 
     this.message = `There was an internal server error with status: ${status}`;
     this.details = error;
-    this.status = status;
-    this.statusText = statusText;
   }
 }

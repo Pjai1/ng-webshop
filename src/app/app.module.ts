@@ -11,9 +11,11 @@ import { PanelComponent } from './panel/panel.component';
 import { TableComponent } from './table/table.component';
 import { ProductService } from './services/product.service';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { PriceFormatPipe } from './shared/pipes/price-format.pipe';
+import { PercentagePipe } from './shared/pipes/percentage.pipe';
 
 @NgModule({
-  declarations: [AppComponent, PanelComponent, TableComponent],
+  declarations: [AppComponent, PanelComponent, TableComponent, PriceFormatPipe, PercentagePipe],
   imports: [
     CommonModule,
     BrowserAnimationsModule,

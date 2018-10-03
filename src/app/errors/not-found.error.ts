@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class NotFoundError extends Error {
-  constructor(status: number, statusText: string, response?: any) {
+  details: any;
+  constructor(public status: number, public statusText: string, error?: any) {
     super();
 
     if (Error.captureStackTrace) {
@@ -16,8 +17,6 @@ export class NotFoundError extends Error {
     }
 
     this.message = `The resource could not be found with status: ${status}`;
-    this.details = response.error;
-    this.status = status;
-    this.statusText = statusText;
+    this.details = error;
   }
 }

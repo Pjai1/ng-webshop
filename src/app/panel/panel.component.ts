@@ -11,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./panel.component.scss'],
 })
 export class PanelComponent implements OnInit {
-  private products: Product[] = [];
+  products: Product[] = [];
 
   constructor(private productService: ProductService, private toastr: ToastrService) {}
 

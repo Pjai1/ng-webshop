@@ -1,16 +1,18 @@
 <div class="row-grid">
-    <div *ngFor="let product of products">
-        <div class="card">
-            <img class="card-img-top" src="{{product.image}}" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">{{product.title}}</h5>
-                <p class="card-text"><b>Product Id:</b> {{product.id}}</p>
-                <p class="card-text"><b>Product Sku:</b> {{product.sku}}</p>
-                <p class="card-text"><b>Product Desc:</b> {{product.desc}}</p>
-                <p class="card-text"><b>Product Stocked:</b> {{product.stocked}}</p>
-                <p class="card-text"><b>Discount:</b> {{product.getDiscount()}}</p>
-                <p class="card-text"><b>Product Price:</b> {{product.price | currency:'EUR':symbol:'1.0-1'}}</p>
-            </div>
-        </div>
+  <div *ngFor="let product of products">
+    <div class="card">
+      <img class="card-img-top"
+           src="{{product.image}}"
+           alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">{{product.title}}</h5>
+        <p class="card-text"><b>Product Id:</b> {{product.id}}</p>
+        <p class="card-text"><b>Product Sku:</b> {{product.sku}}</p>
+        <p class="card-text"><b>Product Desc:</b> {{product.desc}}</p>
+        <p class="card-text"><b>Product Stocked:</b> {{product.stocked}}</p>
+        <p class="card-text"><b>Discount:</b> {{product.getDiscount() | percentage}}</p>
+        <p class="card-text"><b>Product Price:</b> {{product.price | priceFormat}}</p>
+      </div>
     </div>
+  </div>
 </div>

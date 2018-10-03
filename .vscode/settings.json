@@ -18,7 +18,6 @@
     "**/dist": false,
     "**/coverage": true
   },
-  "files.autoSave": "onFocusChange",
   // ===
   // Event Triggers
   // ===
