@@ -35,7 +35,8 @@ export class ProductDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.productId = this.route.snapshot.params.id;
-    this.getProduct();
+    this.productId ? this.getProduct() : (this.product = new Product());
+    console.log('product ' + JSON.stringify(this.product));
   }
 
   getProduct(): void {
@@ -52,10 +53,18 @@ export class ProductDetailComponent implements OnInit {
   }
 
   saveProduct(productForm: FormGroup): void {
-    this.productService.saveProduct(this.productId, this.productForm.value).subscribe((product) => {
-      this.product = product;
-      this.toastr.success(`Product ${this.productId} successfully updated.`);
-    });
+    if (this.productId === undefined) {
+      this.productService.createProduct(this.productForm.value).subscribe((product) => {
+        this.product = product;
+        this.productId = product.id;
+        this.toastr.success(`Product ${this.productId} successfully created.`);
+      });
+    } else {
+      this.productService.saveProduct(this.productId, this.productForm.value).subscribe((product) => {
+        this.product = product;
+        this.toastr.success(`Product ${this.productId} successfully updated.`);
+      });
+    }
   }
 
   onCancel(): void {

@@ -7,5 +7,6 @@ export const appRoutes: Routes = [
   { path: 'home', component: ProductGridComponent },
   { path: 'list', component: ProductTableComponent },
   { path: 'product/:id', component: ProductDetailComponent },
+  { path: 'product', component: ProductDetailComponent },
   { path: '', component: ProductGridComponent, pathMatch: 'full' },
 ];

@@ -10,7 +10,7 @@ export class Product {
   image: string;
   desc: string;
 
-  constructor(data: IProductDto) {
+  constructor(data?: IProductDto) {
     Object.assign(this, data);
   }
 

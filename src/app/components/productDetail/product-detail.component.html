@@ -1,4 +1,4 @@
-<h1>Product {{productId}}</h1>
+<h1>{{productId ? 'Product '+productId : 'New Product'}}</h1>
 
 <form [formGroup]="productForm"
       (ngSubmit)="saveProduct(productForm)">
@@ -19,7 +19,8 @@
            class="form-control"
            id="title">
     <p class="error-message"
-       *ngIf="productForm.get('title').hasError('required')">Title is required</p>
+       *ngIf="productForm.get('title').hasError('required') && productForm.get('title').touched">Title
+      is required</p>
   </div>
   <div class="form-group">
     <label for="price">Price</label>
@@ -29,7 +30,8 @@
            class="form-control"
            id="price">
     <p class="error-message"
-       *ngIf="productForm.get('price').hasError('required')">Price is required</p>
+       *ngIf="productForm.get('price').hasError('required') && productForm.get('price').touched">Price
+      is required</p>
     <p class="error-message"
        *ngIf="productForm.get('price').hasError('pattern')">Price must be a
       number</p>
@@ -39,14 +41,15 @@
       than zero</p>
   </div>
   <div class="form-group">
-    <label for="basePrice">basePrice</label>
+    <label for="basePrice">Base Price</label>
     <input type="text"
            [ngModel]="product?.basePrice | priceFormat"
            formControlName="basePrice"
            class="form-control"
            id="basePrice">
     <p class="error-message"
-       *ngIf="productForm.get('basePrice').hasError('pattern')">Base Price must
+       *ngIf="productForm.get('basePrice').hasError('pattern') && productForm.get('basePrice').touched">Base
+      Price must
       be a number</p>
   </div>
   <div class="form-group">
@@ -66,7 +69,8 @@
            class="form-control"
            id="stocked">
   </div>
-  <div class="form-group">
+  <div class="form-group"
+       *ngIf="productId">
     <label for="image">Image</label>
     <input type="text"
            [ngModel]="product?.image"
@@ -74,7 +78,8 @@
            class="form-control"
            id="image">
   </div>
-  <div class="button-grid">
+  <div class="button-grid"
+       [ngClass]="productId ? null : 'two-button-grid'">
     <button (click)="onCancel()"
             type="button"
             class="btn btn-primary">
@@ -84,7 +89,8 @@
             class="btn btn-success">
       Save
     </button>
-    <button (click)="deleteProduct()"
+    <button *ngIf="productId"
+            (click)="deleteProduct()"
             type="button"
             class="btn btn-danger">
       Delete
