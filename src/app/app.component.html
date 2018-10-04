@@ -3,17 +3,12 @@
      [infiniteScrollDistance]="2"
      [infiniteScrollThrottle]="50">
   <div class="row-grid">
-    <button type="button"
-            class="btn btn-primary btnOne"
-            (click)="toggleViews()">
-      <i class="fas fa-table"></i>Table View
-    </button>
-    <button type="button"
-            class="btn btn-primary"
-            (click)="toggleViews()">
-      <i class="fas fa-columns"></i>Panel View
-    </button>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand mb-0 h1"
+         routerLink="/home">Home</a>
+      <a class="navbar-brand"
+         routerLink="/list">Product List</a>
+    </nav>
   </div>
-  <app-product-grid *ngIf="openPanel"></app-product-grid>
-  <app-product-table *ngIf="!openPanel"></app-product-table>
+  <router-outlet></router-outlet>
 </div>

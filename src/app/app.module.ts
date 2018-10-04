@@ -13,10 +13,13 @@ import { ErrorInterceptor } from './shared/services/interceptors/error.intercept
 import { PriceFormatPipe } from './shared/pipes/price-format.pipe';
 import { PercentagePipe } from './shared/pipes/percentage.pipe';
 import { GridComponent } from './components/productsGrid/grid.component';
+import { RouterModule } from '@angular/router';
+import { appRoutes } from './routes';
 
 @NgModule({
   declarations: [AppComponent, GridComponent, TableComponent, PriceFormatPipe, PercentagePipe],
   imports: [
+    RouterModule.forRoot(appRoutes),
     CommonModule,
     BrowserAnimationsModule,
     BrowserModule,
