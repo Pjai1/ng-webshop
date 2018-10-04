@@ -1,0 +1,93 @@
+<h1>Product {{productId}}</h1>
+
+<form [formGroup]="productForm"
+      (ngSubmit)="saveProduct(productForm)">
+  <div class="form-group">
+
+    <label for="sku">Sku</label>
+    <input type="text"
+           [ngModel]="product?.sku"
+           formControlName="sku"
+           class="form-control"
+           id="sku">
+  </div>
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input type="text"
+           [ngModel]="product?.title"
+           formControlName="title"
+           class="form-control"
+           id="title">
+    <p class="error-message"
+       *ngIf="productForm.get('title').hasError('required')">Title is required</p>
+  </div>
+  <div class="form-group">
+    <label for="price">Price</label>
+    <input type="text"
+           [ngModel]="product?.price | priceFormat"
+           formControlName="price"
+           class="form-control"
+           id="price">
+    <p class="error-message"
+       *ngIf="productForm.get('price').hasError('required')">Price is required</p>
+    <p class="error-message"
+       *ngIf="productForm.get('price').hasError('pattern')">Price must be a
+      number</p>
+    <p class="error-message"
+       *ngIf="productForm.get('price').hasError('minlength')">Price must be
+      higher
+      than zero</p>
+  </div>
+  <div class="form-group">
+    <label for="basePrice">basePrice</label>
+    <input type="text"
+           [ngModel]="product?.basePrice | priceFormat"
+           formControlName="basePrice"
+           class="form-control"
+           id="basePrice">
+    <p class="error-message"
+       *ngIf="productForm.get('basePrice').hasError('pattern')">Base Price must
+      be a number</p>
+  </div>
+  <div class="form-group">
+    <label for="desc">Description</label>
+    <input type="text"
+           [ngModel]="product?.desc"
+           formControlName="desc"
+           class="form-control"
+           id="desc">
+
+  </div>
+  <div class="form-group">
+    <label for="stocked">Stocked</label>
+    <input type="text"
+           [ngModel]="product?.stocked | stocked"
+           formControlName="stocked"
+           class="form-control"
+           id="stocked">
+  </div>
+  <div class="form-group">
+    <label for="image">Image</label>
+    <input type="text"
+           [ngModel]="product?.image"
+           formControlName="image"
+           class="form-control"
+           id="image">
+  </div>
+  <div class="button-grid">
+    <button (click)="onCancel()"
+            type="button"
+            class="btn btn-primary">
+      Cancel
+    </button>
+    <button type="submit"
+            class="btn btn-success">
+      Save
+    </button>
+    <button (click)="deleteProduct()"
+            type="button"
+            class="btn btn-danger">
+      Delete
+    </button>
+  </div>
+</form>

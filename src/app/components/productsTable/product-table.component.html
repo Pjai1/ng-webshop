@@ -20,15 +20,21 @@
       <th>
         Stocked
       </th>
+      <th>
+
+      </th>
     </thead>
     <tbody>
       <tr *ngFor="let product of products">
-        <td>{{product.id}}</td>
+        <td><a routerLink="/product/{{product.id}}">{{product.id}}</a></td>
         <td>{{product.sku}}</td>
         <td>{{product.title}}</td>
         <td>{{product.price | priceFormat}}</td>
         <td>{{product.basePrice | priceFormat}}</td>
-        <td>{{product.stocked}}</td>
+        <td>{{product.stocked | stocked}}</td>
+        <td><button (click)="deleteProduct(product.id)"
+                  type="button"
+                  class="btn btn-danger"><i class="fas fa-times"></i>Delete</button></td>
       </tr>
     </tbody>
   </table>

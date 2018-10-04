@@ -5,10 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-product-grid',
-  templateUrl: './grid.component.html',
-  styleUrls: ['./grid.component.scss'],
+  templateUrl: './product-grid.component.html',
+  styleUrls: ['./product-grid.component.scss'],
 })
-export class GridComponent implements OnInit {
+export class ProductGridComponent implements OnInit {
   products: Product[] = [];
 
   constructor(private productService: ProductService, private toastr: ToastrService) {}

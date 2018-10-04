@@ -7,17 +7,28 @@ import { ToastrModule } from 'ngx-toastr';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { AppComponent } from './app.component';
-import { TableComponent } from './components/productsTable/table.component';
+import { ProductTableComponent } from './components/productsTable/product-table.component';
 import { ProductService } from './shared/services/product.service';
 import { ErrorInterceptor } from './shared/services/interceptors/error.interceptor';
 import { PriceFormatPipe } from './shared/pipes/price-format.pipe';
 import { PercentagePipe } from './shared/pipes/percentage.pipe';
-import { GridComponent } from './components/productsGrid/grid.component';
+import { ProductGridComponent } from './components/productsGrid/product-grid.component';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes';
+import { ProductDetailComponent } from './components/productDetail/product-detail.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { StockedPipe } from './shared/pipes/stocked.pipe';
 
 @NgModule({
-  declarations: [AppComponent, GridComponent, TableComponent, PriceFormatPipe, PercentagePipe],
+  declarations: [
+    AppComponent,
+    ProductGridComponent,
+    ProductTableComponent,
+    PriceFormatPipe,
+    PercentagePipe,
+    ProductDetailComponent,
+    StockedPipe,
+  ],
   imports: [
     RouterModule.forRoot(appRoutes),
     CommonModule,
@@ -29,6 +40,7 @@ import { appRoutes } from './routes';
       positionClass: 'toast-top-right',
     }),
     InfiniteScrollModule,
+    ReactiveFormsModule,
   ],
   providers: [
     {

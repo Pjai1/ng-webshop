@@ -1,0 +1,14 @@
+form {
+  display: grid;
+  grid-template-columns: 940px;
+
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+  }
+
+  .error-message {
+    color: rgb(243, 117, 117)
+  }
+}
