@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class InternalServerError extends Error {
+export class ClientError extends Error {
   details: any;
-
   constructor(public status: number, public statusText: string, error?: any) {
     super();
 
@@ -11,13 +10,13 @@ export class InternalServerError extends Error {
       Error.captureStackTrace(this, this.constructor);
     }
 
-    Object.setPrototypeOf(this, InternalServerError.prototype);
+    Object.setPrototypeOf(this, ClientError.prototype);
 
     if (this.name === undefined || this.name === 'Error') {
       this.name = this.constructor.name;
     }
 
-    this.message = `There was an internal server error with status: ${status}`;
+    this.message = `A client error occurred with status: ${status}`;
     this.details = error;
   }
 }

@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../services/product.service';
-import { first } from 'rxjs/operators';
-import { Product } from '../shared/models/product.model';
-import { HttpErrorResponse } from '@angular/common/http';
+import { ProductService } from '../../shared/services/product.service';
+import { Product } from '../../shared/models/product.model';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'panel-view',
-  templateUrl: './panel.component.html',
-  styleUrls: ['./panel.component.scss'],
+  selector: 'app-product-grid',
+  templateUrl: './grid.component.html',
+  styleUrls: ['./grid.component.scss'],
 })
-export class PanelComponent implements OnInit {
+export class GridComponent implements OnInit {
   products: Product[] = [];
 
   constructor(private productService: ProductService, private toastr: ToastrService) {}

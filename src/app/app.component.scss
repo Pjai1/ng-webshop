@@ -1,22 +1,19 @@
 .container-grid {
-    height: 100%;
-    overflow: scroll;
+  height: 100%;
 
-    .row-grid {
-        grid-template-columns: 300px;
-    
-        .btn-primary:hover {
-            cursor: pointer;
-        }
-    
-        .btnOne {
-            margin-bottom: 10px;
-        }
-    
-        .fas {
-            padding-right: 5px;
-        }
+  .row-grid {
+    grid-template-columns: 300px;
+
+    .btn-primary:hover {
+      cursor: pointer;
     }
+
+    .btnOne {
+      margin-bottom: 10px;
+    }
+
+    .fas {
+      padding-right: 5px;
+    }
+  }
 }
-
-

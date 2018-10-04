@@ -7,15 +7,15 @@ import { ToastrModule } from 'ngx-toastr';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { AppComponent } from './app.component';
-import { PanelComponent } from './panel/panel.component';
-import { TableComponent } from './table/table.component';
-import { ProductService } from './services/product.service';
-import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { TableComponent } from './components/productsTable/table.component';
+import { ProductService } from './shared/services/product.service';
+import { ErrorInterceptor } from './shared/services/interceptors/error.interceptor';
 import { PriceFormatPipe } from './shared/pipes/price-format.pipe';
 import { PercentagePipe } from './shared/pipes/percentage.pipe';
+import { GridComponent } from './components/productsGrid/grid.component';
 
 @NgModule({
-  declarations: [AppComponent, PanelComponent, TableComponent, PriceFormatPipe, PercentagePipe],
+  declarations: [AppComponent, GridComponent, TableComponent, PriceFormatPipe, PercentagePipe],
   imports: [
     CommonModule,
     BrowserAnimationsModule,

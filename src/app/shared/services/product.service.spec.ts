@@ -8,7 +8,6 @@ describe('Product Service', () => {
   const httpClientSpy = { get: jest.fn() };
 
   beforeEach(() => {
-    // httpClientSpy = jasmine.createSpyObj('HttpClient', ['get']);
     service = new ProductService(<any>httpClientSpy);
   });
 

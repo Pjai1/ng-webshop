@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../services/product.service';
+import { ProductService } from '../../shared/services/product.service';
 import { first } from 'rxjs/operators';
-import { Product } from '../shared/models/product.model';
+import { Product } from '../../shared/models/product.model';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
-  selector: 'table-view',
+  selector: 'app-product-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })

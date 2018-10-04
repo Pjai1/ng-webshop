@@ -1,4 +1,4 @@
-import { IProductDto } from '../../services/product.service';
+import { IProductDto } from '../services/product.service';
 
 export class Product {
   id: string;
