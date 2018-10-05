@@ -1,7 +1,7 @@
 import { IProductDto } from '../services/product.service';
 
 export class Product {
-  id: string;
+  id: number;
   sku: string;
   title: string;
   price: number;
@@ -11,10 +11,17 @@ export class Product {
   desc: string;
 
   constructor(data?: IProductDto) {
+    if (!data) {
+      return;
+    }
     Object.assign(this, data);
   }
 
   getDiscount(): number {
-    return Math.round((1 - this.price / this.basePrice) * 100);
+    return 1 - this.price / this.basePrice;
+  }
+
+  isNew() {
+    return !this.id;
   }
 }

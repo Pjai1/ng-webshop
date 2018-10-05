@@ -32,10 +32,10 @@
         <td><a routerLink="/product/{{product.id}}">{{product.id}}</a></td>
         <td>{{product.sku}}</td>
         <td>{{product.title}}</td>
-        <td>{{product.price | priceFormat}}</td>
-        <td>{{product.basePrice | priceFormat}}</td>
+        <td>{{product.price | currencyFormat}}</td>
+        <td>{{product.basePrice | currencyFormat}}</td>
         <td>{{product.stocked | stocked}}</td>
-        <td><button (click)="deleteProduct(product.id)"
+        <td><button (click)="deleteProduct(product)"
                   type="button"
                   class="btn btn-danger"><i class="fas fa-times"></i>Delete</button></td>
       </tr>

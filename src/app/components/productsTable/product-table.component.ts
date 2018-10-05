@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/product.model';
 import { ToastrService } from 'ngx-toastr';
@@ -27,10 +27,10 @@ export class ProductTableComponent implements OnInit {
     });
   }
 
-  deleteProduct(id: string): void {
-    this.productService.deleteProduct(id).subscribe((product) => {
-      this.products = this.products.filter((deletedProduct) => deletedProduct.id !== product.id);
-      this.toastr.success(`Product ${id} successfully deleted.`);
+  deleteProduct(product: Product): void {
+    this.productService.deleteProduct(product).subscribe((deletedProduct) => {
+      this.products = this.products.filter((item) => item.id !== product.id);
+      this.toastr.success(`Product ${product.sku} successfully deleted.`);
     });
   }
 }

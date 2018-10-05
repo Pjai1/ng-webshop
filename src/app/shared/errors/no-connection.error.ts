@@ -1,6 +1,3 @@
-import { Injectable } from '@angular/core';
-
-@Injectable()
 export class NoConnectionError extends Error {
   constructor(message: string = 'Internet connection offline or interrupted.') {
     super(message);

@@ -1,12 +1,14 @@
 import 'jest-preset-angular';
 import 'expect-more-jest';
 
-import * as IntlPolyfill from 'intl'; // tslint:disable-line
+import IntlPolyfill from 'intl'; // tslint:disable-line
 
 // Jest and node only support English locale
 // Therefore we add the polyfill for unit testing
 Intl.NumberFormat = IntlPolyfill.NumberFormat;
 Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
+
+// console.log('Intl', Intl);
 
 //
 //  mock local & session storage

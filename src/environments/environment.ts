@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiProductUrl: 'https://euri-test-api.now.sh/api/products/',
+  apiBaseUrl: 'https://euri-test-api.now.sh/api',
 };
 
 /*

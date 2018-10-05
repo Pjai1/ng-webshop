@@ -14,10 +14,6 @@ export class ProductGridComponent implements OnInit {
   constructor(private productService: ProductService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
-    this.showPanel();
-  }
-
-  showPanel(): void {
     this.getProducts();
   }
 

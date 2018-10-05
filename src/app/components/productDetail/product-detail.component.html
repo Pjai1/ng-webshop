@@ -1,12 +1,11 @@
-<h1>{{productId ? 'Product '+productId : 'New Product'}}</h1>
+<h1>{{product.id ? 'Product '+product.id : 'New Product'}}</h1>
 
 <form [formGroup]="productForm"
-      (ngSubmit)="saveProduct(productForm)">
+      (ngSubmit)="onSubmit(productForm)">
   <div class="form-group">
 
     <label for="sku">Sku</label>
     <input type="text"
-           [ngModel]="product?.sku"
            formControlName="sku"
            class="form-control"
            id="sku">
@@ -14,7 +13,6 @@
   <div class="form-group">
     <label for="title">Title</label>
     <input type="text"
-           [ngModel]="product?.title"
            formControlName="title"
            class="form-control"
            id="title">
@@ -24,8 +22,7 @@
   </div>
   <div class="form-group">
     <label for="price">Price (€)</label>
-    <input type="text"
-           [ngModel]="product?.price"
+    <input type="number"
            formControlName="price"
            class="form-control"
            id="price">
@@ -33,29 +30,20 @@
        *ngIf="productForm.get('price').hasError('required') && productForm.get('price').touched">Price
       is required</p>
     <p class="error-message"
-       *ngIf="productForm.get('price').hasError('pattern')">Price must be a
-      number</p>
-    <p class="error-message"
        *ngIf="productForm.get('price').hasError('minlength')">Price must be
       higher
       than zero</p>
   </div>
   <div class="form-group">
     <label for="basePrice">Base Price (€)</label>
-    <input type="text"
-           [ngModel]="product?.basePrice"
+    <input type="number"
            formControlName="basePrice"
            class="form-control"
            id="basePrice">
-    <p class="error-message"
-       *ngIf="productForm.get('basePrice').hasError('pattern') && productForm.get('basePrice').touched">Base
-      Price must
-      be a number</p>
   </div>
   <div class="form-group">
     <label for="desc">Description</label>
     <input type="text"
-           [ngModel]="product?.desc"
            formControlName="desc"
            class="form-control"
            id="desc">
@@ -64,22 +52,20 @@
   <div class="form-group">
     <label for="stocked">Stocked</label>
     <input type="text"
-           [ngModel]="product?.stocked | stocked"
            formControlName="stocked"
            class="form-control"
            id="stocked">
   </div>
   <div class="form-group"
-       *ngIf="productId">
+       *ngIf="product.id">
     <label for="image">Image</label>
     <input type="text"
-           [ngModel]="product?.image"
            formControlName="image"
            class="form-control"
            id="image">
   </div>
   <div class="button-grid"
-       [ngClass]="productId ? null : 'two-button-grid'">
+       [ngClass]="product.id ? null : 'two-button-grid'">
     <button (click)="onCancel()"
             type="button"
             class="btn btn-primary">
@@ -89,8 +75,8 @@
             class="btn btn-success">
       Save
     </button>
-    <button *ngIf="productId"
-            (click)="deleteProduct()"
+    <button *ngIf="product.id"
+            (click)="onDelete(product)"
             type="button"
             class="btn btn-danger">
       Delete

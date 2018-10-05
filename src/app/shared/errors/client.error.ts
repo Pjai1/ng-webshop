@@ -1,6 +1,3 @@
-import { Injectable } from '@angular/core';
-
-@Injectable()
 export class ClientError extends Error {
   details: any;
   constructor(public status: number, public statusText: string, error?: any) {

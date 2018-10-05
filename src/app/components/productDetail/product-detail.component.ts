@@ -12,7 +12,6 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit {
-  productId: string;
   product: Product;
   productForm: FormGroup;
 
@@ -25,8 +24,8 @@ export class ProductDetailComponent implements OnInit {
     this.productForm = new FormGroup({
       sku: new FormControl(''),
       title: new FormControl('', [Validators.required]),
-      price: new FormControl('', [Validators.required, Validators.min(1), Validators.pattern('^[0-9]*$')]),
-      basePrice: new FormControl('', [Validators.pattern('^[0-9]*$')]),
+      price: new FormControl('', [Validators.required, Validators.min(1)]),
+      basePrice: new FormControl(''),
       stocked: new FormControl(''),
       image: new FormControl({ value: '', disabled: true }),
       desc: new FormControl(''),
@@ -34,39 +33,48 @@ export class ProductDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productId = this.route.snapshot.params.id;
-    this.productId ? this.getProduct() : (this.product = new Product());
+    const productId = this.route.snapshot.params.id;
+
+    this.product = new Product();
+    if (productId) {
+      this.getProduct(productId);
+    }
   }
 
-  getProduct(): void {
-    this.productService.getProduct(this.productId).subscribe((product) => {
-      this.product = product;
+  getProduct(productId: number): void {
+    this.productService.getProduct(productId).subscribe((retrievedProduct) => {
+      this.product = retrievedProduct;
+      this.productForm.patchValue(this.product);
     });
   }
 
-  deleteProduct(): void {
-    this.productService.deleteProduct(this.productId).subscribe((product) => {
-      this.toastr.success(`Product ${this.productId} successfully deleted.`);
+  onDelete(product: Product): void {
+    this.productService.deleteProduct(this.product).subscribe((deletedProduct) => {
+      this.toastr.success(`Product ${product.sku} successfully deleted.`);
       this.location.back();
     });
   }
 
-  saveProduct(productForm: FormGroup): void {
-    if (this.productId === undefined) {
-      this.productService.createProduct(this.productForm.value).subscribe((product) => {
-        this.product = product;
-        this.productId = product.id;
-        this.toastr.success(`Product ${this.productId} successfully created.`);
-      });
-    } else {
-      this.productService.saveProduct(this.productId, this.productForm.value).subscribe((product) => {
-        this.product = product;
-        this.toastr.success(`Product ${this.productId} successfully updated.`);
-      });
+  onSubmit(productForm: FormGroup): void {
+    if (!productForm.valid) {
+      this.toastr.error('Please fill in all required fields');
+      return;
     }
+
+    this.product = Object.assign(this.product, this.productForm.value);
+
+    this.productService.saveProduct(this.product).subscribe((product) => {
+      this.product = product;
+      this.toastr.success(`Product ${product.sku} successfully updated.`);
+      this.location.back();
+    });
   }
 
   onCancel(): void {
     this.location.back();
+  }
+
+  mergeFormAndProduct(formData: FormData, product: Product) {
+    return Object.assign(formData, product);
   }
 }

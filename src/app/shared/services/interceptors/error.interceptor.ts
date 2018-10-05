@@ -29,11 +29,10 @@ export class ErrorInterceptor implements HttpInterceptor {
             this.toastr.error('Oops, looks like something\'s wrong with your connection. Please retry.');
             return throwError(new NoConnectionError(err.message));
           }
-        } else {
-          console.error('Something really bad happened with status ' + <any>err.status + ' and body ' + err.message);
-          this.toastr.error('Something really bad happened, please contact the administrator of this website.');
-          return throwError(err);
         }
+        console.error('Something really bad happened with status ' + <any>err.status + ' and body ' + err.message);
+        this.toastr.error('Something really bad happened, please contact the administrator of this website.');
+        return throwError(err);
       }),
     );
   }
