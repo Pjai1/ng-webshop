@@ -23,9 +23,9 @@
       is required</p>
   </div>
   <div class="form-group">
-    <label for="price">Price</label>
+    <label for="price">Price (€)</label>
     <input type="text"
-           [ngModel]="product?.price | priceFormat"
+           [ngModel]="product?.price"
            formControlName="price"
            class="form-control"
            id="price">
@@ -41,9 +41,9 @@
       than zero</p>
   </div>
   <div class="form-group">
-    <label for="basePrice">Base Price</label>
+    <label for="basePrice">Base Price (€)</label>
     <input type="text"
-           [ngModel]="product?.basePrice | priceFormat"
+           [ngModel]="product?.basePrice"
            formControlName="basePrice"
            class="form-control"
            id="basePrice">
