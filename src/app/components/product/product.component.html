@@ -1,0 +1,14 @@
+<div class="card">
+  <img class="card-img-top"
+       src="{{product.image}}"
+       alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{product.title}}</h5>
+    <p class="card-text"><b>Product Id:</b> {{product.id}}</p>
+    <p class="card-text"><b>Product Sku:</b> {{product.sku}}</p>
+    <p class="card-text"><b>Product Desc:</b> {{product.desc}}</p>
+    <p class="card-text"><b>Product Stocked:</b> {{product.stocked | stocked}}</p>
+    <p class="card-text"><b>Discount:</b> {{product.getDiscount() | percentage}}</p>
+    <p class="card-text"><b>Product Price:</b> {{product.price | currencyFormat}}</p>
+  </div>
+</div>

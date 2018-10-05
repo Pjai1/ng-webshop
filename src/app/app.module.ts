@@ -18,6 +18,7 @@ import { appRoutes } from './routes';
 import { ProductDetailComponent } from './components/productDetail/product-detail.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { StockedPipe } from './shared/pipes/stocked.pipe';
+import { ProductComponent } from './components/product/product.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { StockedPipe } from './shared/pipes/stocked.pipe';
     PercentagePipe,
     ProductDetailComponent,
     StockedPipe,
+    ProductComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
