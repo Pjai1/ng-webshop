@@ -8,7 +8,6 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { AppComponent } from './app.component';
 import { ProductTableComponent } from './components/productsTable/product-table.component';
-import { ProductService } from './shared/services/product.service';
 import { ErrorInterceptor } from './shared/services/interceptors/error.interceptor';
 import { CurrencyFormatPipe } from './shared/pipes/currency-format.pipe';
 import { PercentagePipe } from './shared/pipes/percentage.pipe';
@@ -19,6 +18,10 @@ import { ProductDetailComponent } from './components/productDetail/product-detai
 import { ReactiveFormsModule } from '@angular/forms';
 import { StockedPipe } from './shared/pipes/stocked.pipe';
 import { ProductComponent } from './components/product/product.component';
+import { SortableColumnComponent } from './components/sortableColumn/sortable-column.component';
+import { ProductService } from './shared/services/product.service';
+import { SortService } from './shared/services/sort.service';
+import { SortableTableDirective } from './shared/directives/sortable-table.directive';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,8 @@ import { ProductComponent } from './components/product/product.component';
     ProductDetailComponent,
     StockedPipe,
     ProductComponent,
+    SortableColumnComponent,
+    SortableTableDirective,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -50,6 +55,8 @@ import { ProductComponent } from './components/product/product.component';
       useClass: ErrorInterceptor,
       multi: true,
     },
+    ProductService,
+    SortService,
   ],
   bootstrap: [AppComponent],
 })

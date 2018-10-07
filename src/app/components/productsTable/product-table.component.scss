@@ -7,3 +7,15 @@
   margin-bottom: 20px;
   float: right;
 }
+
+th {
+  cursor: pointer;
+}
+
+.sort-asc:after {
+  content: '\25B2';
+}
+
+.sort-desc:after {
+  content: '\25BC';
+}

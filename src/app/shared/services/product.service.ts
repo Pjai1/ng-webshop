@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -31,8 +31,15 @@ const productUrl = `${environment.apiBaseUrl}/products`;
 export class ProductService {
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<IProductsDto>(productUrl).pipe(
+  getProducts(sortProperty?: string): Observable<Product[]> {
+    sortProperty ? (sortProperty = sortProperty.trim()) : (sortProperty = null);
+    const options = sortProperty
+      ? {
+          params: new HttpParams().set('sort', sortProperty),
+        }
+      : {};
+
+    return this.http.get<IProductsDto>(productUrl, options).pipe(
       map((data) => {
         return data.selectedProducts.map((dto) => {
           return new Product(<any>dto);

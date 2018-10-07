@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/product.model';
 import { ToastrService } from 'ngx-toastr';
+import { SortEvent } from '../../shared/services/sort.service';
 
 @Component({
   selector: 'app-product-table',
@@ -21,8 +22,8 @@ export class ProductTableComponent implements OnInit {
     this.getProducts();
   }
 
-  getProducts(): void {
-    this.productService.getProducts().subscribe((data: any) => {
+  getProducts(sortProperty: string = ''): void {
+    this.productService.getProducts(sortProperty).subscribe((data: any) => {
       this.products = data;
     });
   }
@@ -32,5 +33,13 @@ export class ProductTableComponent implements OnInit {
       this.products = this.products.filter((item) => item.id !== product.id);
       this.toastr.success(`Product ${product.sku} successfully deleted.`);
     });
+  }
+
+  onSorted(event: SortEvent): void {
+    if (event.sortDirection === 'asc') {
+      this.getProducts(event.sortColumn);
+    } else {
+      this.getProducts(`-${event.sortColumn}`);
+    }
   }
 }

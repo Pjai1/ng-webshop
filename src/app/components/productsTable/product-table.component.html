@@ -3,24 +3,33 @@
             class="btn btn-primary">
       <i class="fas fa-plus"></i>Add Product
     </button></a>
-  <table class="table">
+  <table appSortableTable
+         class="table table-dark table-hover"
+         (sorted)="onSorted($event)">
     <thead>
-      <th>
+      <th app-sortable-column
+          sortable-column="id"
+          sortable-direction="asc">
         Id
       </th>
-      <th>
+      <th app-sortable-column
+          sortable-column="sku">
         Sku
       </th>
-      <th>
+      <th app-sortable-column
+          sortable-column="title">
         Title
       </th>
-      <th>
+      <th app-sortable-column
+          sortable-column="price">
         Price
       </th>
-      <th>
+      <th app-sortable-column
+          sortable-column="basePrice">
         BasePrice
       </th>
-      <th>
+      <th app-sortable-column
+          sortable-column="stocked">
         Stocked
       </th>
       <th>
