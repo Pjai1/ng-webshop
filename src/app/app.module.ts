@@ -22,6 +22,7 @@ import { SortableColumnComponent } from './components/sortableColumn/sortable-co
 import { ProductService } from './shared/services/product.service';
 import { SortService } from './shared/services/sort.service';
 import { SortableTableDirective } from './shared/directives/sortable-table.directive';
+import { BasketComponent } from './components/basket/basket.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { SortableTableDirective } from './shared/directives/sortable-table.direc
     ProductComponent,
     SortableColumnComponent,
     SortableTableDirective,
+    BasketComponent,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -55,8 +57,6 @@ import { SortableTableDirective } from './shared/directives/sortable-table.direc
       useClass: ErrorInterceptor,
       multi: true,
     },
-    ProductService,
-    SortService,
   ],
   bootstrap: [AppComponent],
 })

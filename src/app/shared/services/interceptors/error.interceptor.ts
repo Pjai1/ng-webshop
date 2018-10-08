@@ -17,20 +17,22 @@ export class ErrorInterceptor implements HttpInterceptor {
         console.log('hitting this ' + JSON.stringify(err));
         if (err instanceof HttpErrorResponse) {
           if (err.status >= 400 && err.status <= 499) {
-            console.error('Error Occurred with status ' + <any>err.status + ' and body ' + err);
+            console.error('Error Occurred with status ' + <any>err.status + ' and body ' + JSON.stringify(err));
             this.toastr.error('Oops, something went wrong. Please try again.');
             return throwError(new ClientError(err.status, err.statusText, err.message));
           } else if (err.status >= 500) {
-            console.error('Error Occurred with status ' + <any>err.status + ' and body ' + err.message);
+            console.error('Error Occurred with status ' + <any>err.status + ' and body ' + JSON.stringify(err.message));
             this.toastr.error('Oops, something went wrong. Please try again.');
             return throwError(new ServerError(err.status, err.statusText, err));
           } else if (err.status === 0) {
-            console.error('Error Occurred with status ' + <any>err.status + ' and body ' + err.message);
+            console.error('Error Occurred with status ' + <any>err.status + ' and body ' + JSON.stringify(err.message));
             this.toastr.error('Oops, looks like something\'s wrong with your connection. Please retry.');
             return throwError(new NoConnectionError(err.message));
           }
         }
-        console.error('Something really bad happened with status ' + <any>err.status + ' and body ' + err.message);
+        console.error(
+          'Something really bad happened with status ' + <any>err.status + ' and body ' + JSON.stringify(err.message),
+        );
         this.toastr.error('Something really bad happened, please contact the administrator of this website.');
         return throwError(err);
       }),

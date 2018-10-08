@@ -6,7 +6,9 @@ export interface SortEvent {
   sortDirection: string;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SortService {
   constructor() {}
 

@@ -9,6 +9,7 @@ export class Product {
   stocked: boolean;
   image: string;
   desc: string;
+  quantity?: number;
 
   constructor(data?: IProductDto) {
     if (!data) {
