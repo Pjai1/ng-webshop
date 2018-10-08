@@ -12,11 +12,12 @@ import { ServiceBus } from '../../serviceBus';
 export class ProductComponent {
   @Input()
   product: Product;
+  quantity: number;
 
   constructor(private basketService: BasketService, private serviceBus: ServiceBus) {}
 
   onAddProduct(): void {
-    this.basketService.addToBasket(this.product.id).subscribe((basket) => {
+    this.basketService.addToBasket(this.product, this.quantity).subscribe((basket) => {
       this.serviceBus.publish('addProductToBasket', basket);
     });
   }

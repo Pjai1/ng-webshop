@@ -1,18 +1,20 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { BasketService } from '../../shared/services/basket.service';
 import { Basket, BasketItem } from '../../shared/models/basket.model';
 import { ProductService } from '../../shared/services/product.service';
 import { ServiceBus } from '../../serviceBus';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-basket',
   templateUrl: './basket.component.html',
   styleUrls: ['./basket.component.scss'],
 })
-export class BasketComponent implements OnInit {
+export class BasketComponent implements OnInit, OnDestroy {
   basketItems: BasketItem[];
-  basket: Basket;
+  basket: Basket = new Basket();
   modalClicked = false;
+  subscription: Subscription;
 
   constructor(
     private basketService: BasketService,
@@ -22,41 +24,55 @@ export class BasketComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('basket is live');
-    this.serviceBus.listenForAll().subscribe((event) => {
+    this.subscription = this.serviceBus.listenForAll().subscribe((event) => {
       if (event.type === 'addProductToBasket') {
+        console.log('adding product to basket');
         this.modalClicked = true;
         this.getBasket();
+      }
+
+      if (event.type === 'openBasket') {
+        this.modalClicked = !this.modalClicked;
+      }
+
+      if (event.type === 'deleteProduct') {
+        console.log('deleting product from basket');
+        this.basketService.deleteProductFromBasket(event.data).subscribe((basket) => {
+          this.serviceBus.publish('productDeleted', event.data);
+          console.log('deleted product ' + JSON.stringify(event.data));
+          this.getBasket();
+        });
       }
     });
   }
 
-  @HostListener('click', ['$event'])
-  onOpen(event: Event): void {
-    console.log(event);
-
-    if (event.srcElement.className !== 'btn btn-danger') {
-      this.modalClicked = !this.modalClicked;
-    }
+  onOpen(): void {
+    console.log('opening basket ' + JSON.stringify(this.basket));
+    this.serviceBus.publish('openBasket', this.basket);
     this.getBasket();
   }
 
   getBasket(): void {
     this.basketItems = [];
     this.basketService.getBasket().subscribe((basket) => {
-      console.log(Object.values(basket));
-      this.basket = basket;
-      this.getProductFromBasket(this.basket);
+      console.log('getting basket', basket);
+      this.getProductFromBasket(basket);
     });
   }
 
-  getProductFromBasket(basket: Basket) {
+  getProductFromBasket(basket: any) {
+    this.basket.totalPrice = 0;
+    this.basket.items = [];
     const basketArr = Object.values(basket);
-
-    basketArr.forEach((product) => {
-      this.productService.getProduct(product.id).subscribe((retrievedProduct) => {
+    console.log('basketArr ' + JSON.stringify(basket));
+    basketArr.forEach((item: any, i: number) => {
+      this.productService.getProduct(item.id).subscribe((retrievedProduct) => {
+        console.log('got product ' + JSON.stringify(retrievedProduct));
         const basketItem: BasketItem = new BasketItem(retrievedProduct);
-        basketItem.quantity = product.quantity;
-        this.basketItems.push(basketItem);
+        basketItem.quantity = item.quantity;
+        basketItem.getTotalPrice();
+        console.log('the basketitem ' + JSON.stringify(basketItem));
+        this.basket.items.push(basketItem);
       });
     });
   }
@@ -65,6 +81,11 @@ export class BasketComponent implements OnInit {
     console.log('clear');
     this.basketService.deleteBasket().subscribe((basket) => {
       console.log('basket clear' + JSON.stringify(basket));
+      this.basket = new Basket();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

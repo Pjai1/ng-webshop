@@ -1,4 +1,5 @@
-<i class="fas fa-shopping-basket"></i>
+<i class="fas fa-shopping-basket"
+   (click)="onOpen()"></i>
 <div class="modal"
      tabindex="-1"
      role="dialog"
@@ -16,11 +17,12 @@
         </button>
       </div>
       <div class="modal-body"
-           *ngFor="let item of basketItems">
+           *ngFor="let item of basket.items">
         <p><b>Name:</b> {{item.title}}</p>
         <p><b>Price:</b> {{item.price | currencyFormat}}</p>
         <p><b>Quantity:</b> {{item.quantity}}</p>
       </div>
+      <p><b>Total Price:</b> {{basket.getTotalPrice() | currencyFormat}}</p>
       <button type="button"
               (click)="onClear()"
               class="btn btn-danger"

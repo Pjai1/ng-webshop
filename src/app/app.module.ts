@@ -15,7 +15,7 @@ import { ProductGridComponent } from './components/productsGrid/product-grid.com
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './routes';
 import { ProductDetailComponent } from './components/productDetail/product-detail.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StockedPipe } from './shared/pipes/stocked.pipe';
 import { ProductComponent } from './components/product/product.component';
 import { SortableColumnComponent } from './components/sortableColumn/sortable-column.component';
@@ -50,6 +50,7 @@ import { BasketComponent } from './components/basket/basket.component';
     }),
     InfiniteScrollModule,
     ReactiveFormsModule,
+    FormsModule,
   ],
   providers: [
     {

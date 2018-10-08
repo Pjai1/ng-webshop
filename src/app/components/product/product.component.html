@@ -10,10 +10,11 @@
     <p class="card-text"><b>Product Stocked:</b> {{product.stocked | stocked}}</p>
     <p class="card-text"><b>Discount:</b> {{product.getDiscount() | percentage}}</p>
     <p class="card-text"><b>Product Price:</b> {{product.price | currencyFormat}}</p>
-    <button (click)="onAddProduct()"
-            type="button"
-            class="btn btn-primary">
-      Add to Basket
-    </button>
+    <p *ngIf="product.stocked"><button (click)="onAddProduct()"
+              type="button"
+              class="btn btn-primary">
+        Add to Basket
+      </button><input type="number"
+             [(ngModel)]="quantity"></p>
   </div>
 </div>

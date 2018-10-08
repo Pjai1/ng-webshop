@@ -5,6 +5,8 @@ import { Product } from '../../shared/models/product.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
+import { ServiceBus } from '../../serviceBus';
 
 @Component({
   selector: 'app-product-detail',
@@ -20,6 +22,7 @@ export class ProductDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private toastr: ToastrService,
+    private serviceBus: ServiceBus,
   ) {
     this.productForm = new FormGroup({
       sku: new FormControl(''),
@@ -49,10 +52,8 @@ export class ProductDetailComponent implements OnInit {
   }
 
   onDelete(product: Product): void {
-    this.productService.deleteProduct(this.product).subscribe((deletedProduct) => {
-      this.toastr.success(`Product ${product.sku} successfully deleted.`);
-      this.location.back();
-    });
+    this.serviceBus.publish('deleteProduct', product);
+    this.location.back();
   }
 
   onSubmit(productForm: FormGroup): void {
@@ -61,7 +62,9 @@ export class ProductDetailComponent implements OnInit {
       return;
     }
 
+    this.productForm.value.stocked = this.productForm.value.stocked.toLowerCase() === 'true' ? true : false;
     this.product = Object.assign(this.product, this.productForm.value);
+    console.log('putting this product ' + JSON.stringify(this.product));
 
     this.productService.saveProduct(this.product).subscribe((product) => {
       this.product = product;
