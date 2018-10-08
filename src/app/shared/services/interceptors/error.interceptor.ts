@@ -1,7 +1,7 @@
 import { Injectable, ErrorHandler } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, retry } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { NoConnectionError } from '../../errors/no-connection.error';
 import { ServerError } from '../../errors/server.error';
@@ -34,6 +34,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         this.toastr.error('Something really bad happened, please contact the administrator of this website.');
         return throwError(err);
       }),
+      retry(2),
     );
   }
 }

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://euri-test-api.now.sh/api',
+  apiBaseUrl: 'http://localhost:3000/api',
 };
 
 /*
