@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
-import { BasketService } from '../../shared/services/basket.service';
+import { BasketService, BasketDto } from '../../shared/services/basket.service';
 import { Basket, BasketItem } from '../../shared/models/basket.model';
 import { ProductService } from '../../shared/services/product.service';
 import { ServiceBus } from '../../serviceBus';
@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./basket.component.scss'],
 })
 export class BasketComponent implements OnInit, OnDestroy {
-  basketItems: BasketItem[];
   basket: Basket = new Basket();
   modalClicked = false;
   subscription: Subscription;
@@ -26,7 +25,7 @@ export class BasketComponent implements OnInit, OnDestroy {
     console.log('basket is live');
     this.subscription = this.serviceBus.listenForAll().subscribe((event) => {
       if (event.type === 'addProductToBasket') {
-        console.log('adding product to basket');
+        console.log('adding product to basket', event.data);
         this.modalClicked = true;
         this.getBasket();
       }
@@ -43,6 +42,11 @@ export class BasketComponent implements OnInit, OnDestroy {
           this.getBasket();
         });
       }
+
+      if (event.type === 'clearBasket') {
+        console.log('CLEARING BASKET', event.data);
+        this.basket = new Basket();
+      }
     });
   }
 
@@ -53,19 +57,15 @@ export class BasketComponent implements OnInit, OnDestroy {
   }
 
   getBasket(): void {
-    this.basketItems = [];
+    this.basket = new Basket();
     this.basketService.getBasket().subscribe((basket) => {
       console.log('getting basket', basket);
       this.getProductFromBasket(basket);
     });
   }
 
-  getProductFromBasket(basket: any) {
-    this.basket.totalPrice = 0;
-    this.basket.items = [];
-    const basketArr = Object.values(basket);
-    console.log('basketArr ' + JSON.stringify(basket));
-    basketArr.forEach((item: any, i: number) => {
+  getProductFromBasket(basket: Basket) {
+    basket.items.forEach((item: any) => {
       this.productService.getProduct(item.id).subscribe((retrievedProduct) => {
         console.log('got product ' + JSON.stringify(retrievedProduct));
         const basketItem: BasketItem = new BasketItem(retrievedProduct);
@@ -78,10 +78,8 @@ export class BasketComponent implements OnInit, OnDestroy {
   }
 
   onClear(): void {
-    console.log('clear');
     this.basketService.deleteBasket().subscribe((basket) => {
-      console.log('basket clear' + JSON.stringify(basket));
-      this.basket = new Basket();
+      this.serviceBus.publish('clearBasket', basket);
     });
   }
 

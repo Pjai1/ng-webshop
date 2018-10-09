@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/product.model';
 import { ToastrService } from 'ngx-toastr';
-import { SortEvent } from '../../shared/services/sort.service';
+import { SortEvent } from '../../shared/components/sortableColumn/sort.service';
 import { ServiceBus } from '../../serviceBus';
 import { Subscription } from 'rxjs';
 
@@ -46,11 +46,7 @@ export class ProductTableComponent implements OnInit, OnDestroy {
   }
 
   onSorted(event: SortEvent): void {
-    if (event.sortDirection === 'asc') {
-      this.getProducts(event.sortColumn);
-    } else {
-      this.getProducts(`-${event.sortColumn}`);
-    }
+    this.getProducts(event.sortExpression);
   }
 
   ngOnDestroy(): void {

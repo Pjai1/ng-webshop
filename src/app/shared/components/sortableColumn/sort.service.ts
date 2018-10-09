@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 export interface SortEvent {
   sortColumn: string;
   sortDirection: string;
+  sortExpression: string;
 }
 
 @Injectable({
@@ -17,6 +18,11 @@ export class SortService {
   columnSorted$ = this.sortedSource.asObservable();
 
   columnSorted(event: SortEvent) {
+    if (event.sortDirection === 'asc') {
+      event.sortExpression = `${event.sortColumn}`;
+    } else {
+      event.sortExpression = `-${event.sortColumn}`;
+    }
     this.sortedSource.next(event);
   }
 }

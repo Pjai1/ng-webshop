@@ -1,10 +1,11 @@
 import { Product } from './product.model';
+import { BasketDto } from '../services/basket.service';
 
 export class Basket {
-  totalPrice?: number;
-  items?: BasketItem[];
+  totalPrice = 0;
+  items?: BasketItem[] = [];
 
-  constructor(data?: Basket) {
+  constructor(data?: BasketDto) {
     if (!data) {
       return;
     }
@@ -13,14 +14,19 @@ export class Basket {
 
   getTotalPrice(): number {
     console.log('how many items ' + this.items.length);
-    this.items.forEach((item) => {
-      this.totalPrice += item.totalPrice;
-    });
-    return this.totalPrice;
+    if (this.items) {
+      this.totalPrice = 0;
+      this.items.forEach((item) => {
+        console.log('COUNTING TOTAL PRICE ' + JSON.stringify(item));
+        this.totalPrice += item.totalPrice;
+      });
+      return this.totalPrice;
+    }
   }
 }
 
 export class BasketItem {
+  id: number;
   title: string;
   price: number;
   quantity: number;
@@ -33,7 +39,7 @@ export class BasketItem {
     Object.assign(this, data);
   }
 
-  getTotalPrice() {
+  getTotalPrice(): number {
     return (this.totalPrice = this.price * this.quantity);
   }
 }

@@ -1,5 +1,5 @@
 import { Directive, OnInit, OnDestroy, Output } from '@angular/core';
-import { SortService } from '../services/sort.service';
+import { SortService } from './sort.service';
 import { EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 

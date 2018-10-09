@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -18,11 +18,9 @@ import { ProductDetailComponent } from './components/productDetail/product-detai
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { StockedPipe } from './shared/pipes/stocked.pipe';
 import { ProductComponent } from './components/product/product.component';
-import { SortableColumnComponent } from './components/sortableColumn/sortable-column.component';
-import { ProductService } from './shared/services/product.service';
-import { SortService } from './shared/services/sort.service';
-import { SortableTableDirective } from './shared/directives/sortable-table.directive';
+import { SortableTableDirective } from './shared/components/sortableColumn/sortable-table.directive';
 import { BasketComponent } from './components/basket/basket.component';
+import { SortableColumnComponent } from './shared/components/sortableColumn/sortable-column.component';
 
 @NgModule({
   declarations: [
