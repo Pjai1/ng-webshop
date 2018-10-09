@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 export interface SortEvent {
   sortColumn: string;
   sortDirection: string;
-  sortExpression: string;
+  sortExpression?: string;
 }
 
 @Injectable({

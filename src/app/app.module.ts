@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 import { AppComponent } from './app.component';
 import { ProductTableComponent } from './components/productsTable/product-table.component';
@@ -21,6 +23,10 @@ import { ProductComponent } from './components/product/product.component';
 import { SortableTableDirective } from './shared/components/sortableColumn/sortable-table.directive';
 import { BasketComponent } from './components/basket/basket.component';
 import { SortableColumnComponent } from './shared/components/sortableColumn/sortable-column.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './store';
+import { environment } from 'src/environments/environment';
+import { ProductEffects } from './store/product/product.effects';
 
 @NgModule({
   declarations: [
@@ -49,6 +55,12 @@ import { SortableColumnComponent } from './shared/components/sortableColumn/sort
     InfiniteScrollModule,
     ReactiveFormsModule,
     FormsModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreDevtoolsModule.instrument({
+      name: 'Euricom Webshop',
+      logOnly: !environment.production,
+    }),
+    EffectsModule.forRoot([ProductEffects]),
   ],
   providers: [
     {

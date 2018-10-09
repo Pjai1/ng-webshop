@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from '../../shared/services/product.service';
-import { Product } from '../../shared/models/product.model';
 import { ToastrService } from 'ngx-toastr';
+import { Store, select } from '@ngrx/store';
+import * as fromProduct from '../../store/product/product.reducers';
+import { GetProductsAction } from 'src/app/store/product/product.actions';
+import { Observable } from 'rxjs';
+import { Product } from 'src/app/shared/models/product.model';
 
 @Component({
   selector: 'app-product-grid',
@@ -9,17 +13,13 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./product-grid.component.scss'],
 })
 export class ProductGridComponent implements OnInit {
-  products: Product[] = [];
+  products$: Observable<Product[]>;
 
-  constructor(private productService: ProductService, private toastr: ToastrService) {}
-
-  ngOnInit(): void {
-    this.getProducts();
+  constructor(private store: Store<fromProduct.State>) {
+    this.products$ = this.store.select('products');
   }
 
-  getProducts(): void {
-    this.productService.getProducts().subscribe((products) => {
-      this.products = products;
-    });
+  ngOnInit(): void {
+    this.store.dispatch(new GetProductsAction());
   }
 }
