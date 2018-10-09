@@ -21,7 +21,6 @@ export class ProductTableComponent implements OnInit, OnDestroy {
     this.subscription = this.serviceBus.listenForAll().subscribe((event) => {
       if (event.type === 'productDeleted') {
         this.productService.deleteProduct(event.data).subscribe((deletedProduct) => {
-          console.log('we deleted ' + JSON.stringify(deletedProduct));
           this.products = this.products.filter((item) => item.id !== event.data.id);
           this.toastr.success(`Product ${event.data.sku} successfully deleted.`);
         });

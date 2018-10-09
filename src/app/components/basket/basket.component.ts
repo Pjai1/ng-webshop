@@ -3,7 +3,8 @@ import { BasketService, BasketDto } from '../../shared/services/basket.service';
 import { Basket, BasketItem } from '../../shared/models/basket.model';
 import { ProductService } from '../../shared/services/product.service';
 import { ServiceBus } from '../../serviceBus';
-import { Subscription } from 'rxjs';
+import { Subscription, forkJoin } from 'rxjs';
+import { Product } from 'src/app/shared/models/product.model';
 
 @Component({
   selector: 'app-basket',
@@ -13,7 +14,7 @@ import { Subscription } from 'rxjs';
 export class BasketComponent implements OnInit, OnDestroy {
   basket: Basket = new Basket();
   modalClicked = false;
-  subscription: Subscription;
+  subscription?: Subscription;
 
   constructor(
     private basketService: BasketService,
@@ -22,12 +23,11 @@ export class BasketComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log('basket is live');
     this.subscription = this.serviceBus.listenForAll().subscribe((event) => {
       if (event.type === 'addProductToBasket') {
-        console.log('adding product to basket', event.data);
         this.modalClicked = true;
-        this.getBasket();
+        this.basket.addProduct(event.data.product, event.data.quantity);
+        this.basketService.addToBasket(event.data.product, event.data.quantity).subscribe(() => {});
       }
 
       if (event.type === 'openBasket') {
@@ -35,55 +35,53 @@ export class BasketComponent implements OnInit, OnDestroy {
       }
 
       if (event.type === 'deleteProduct') {
-        console.log('deleting product from basket');
         this.basketService.deleteProductFromBasket(event.data).subscribe((basket) => {
           this.serviceBus.publish('productDeleted', event.data);
-          console.log('deleted product ' + JSON.stringify(event.data));
-          this.getBasket();
+          this.basket.deleteProduct(event.data);
         });
-      }
-
-      if (event.type === 'clearBasket') {
-        console.log('CLEARING BASKET', event.data);
-        this.basket = new Basket();
       }
     });
   }
 
   onOpen(): void {
-    console.log('opening basket ' + JSON.stringify(this.basket));
     this.serviceBus.publish('openBasket', this.basket);
     this.getBasket();
   }
 
   getBasket(): void {
-    this.basket = new Basket();
     this.basketService.getBasket().subscribe((basket) => {
-      console.log('getting basket', basket);
-      this.getProductFromBasket(basket);
+      // far better to have one subscription compared to multiple with forkjoin
+      const productSources: any = [];
+      basket.items.forEach((item) => {
+        productSources.push(this.productService.getProduct(item.id));
+      });
+
+      forkJoin<Product>(productSources).subscribe((products) => {
+        products.forEach((product) => {
+          basket.updateProductInfo(product);
+        });
+        this.basket = basket;
+      });
     });
   }
 
   getProductFromBasket(basket: Basket) {
     basket.items.forEach((item: any) => {
       this.productService.getProduct(item.id).subscribe((retrievedProduct) => {
-        console.log('got product ' + JSON.stringify(retrievedProduct));
-        const basketItem: BasketItem = new BasketItem(retrievedProduct);
-        basketItem.quantity = item.quantity;
-        basketItem.getTotalPrice();
-        console.log('the basketitem ' + JSON.stringify(basketItem));
-        this.basket.items.push(basketItem);
+        this.basket.addProduct(retrievedProduct, item.quantity);
       });
     });
   }
 
   onClear(): void {
-    this.basketService.deleteBasket().subscribe((basket) => {
-      this.serviceBus.publish('clearBasket', basket);
+    this.basketService.deleteBasket().subscribe(() => {
+      this.basket = new Basket();
     });
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

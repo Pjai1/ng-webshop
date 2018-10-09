@@ -1,27 +1,39 @@
 import { Product } from './product.model';
-import { BasketDto } from '../services/basket.service';
+import { BasketDto, BasketItemDto } from '../services/basket.service';
 
 export class Basket {
-  totalPrice = 0;
   items?: BasketItem[] = [];
 
   constructor(data?: BasketDto) {
     if (!data) {
       return;
     }
-    Object.assign(this, data);
+    this.items = data.map((item) => new BasketItem(item));
   }
 
   getTotalPrice(): number {
-    console.log('how many items ' + this.items.length);
-    if (this.items) {
-      this.totalPrice = 0;
-      this.items.forEach((item) => {
-        console.log('COUNTING TOTAL PRICE ' + JSON.stringify(item));
-        this.totalPrice += item.totalPrice;
-      });
-      return this.totalPrice;
+    return this.items.reduce((acc, item) => acc + item.getTotalPrice(), 0);
+  }
+
+  updateProductInfo(product: Product) {
+    const item = this.items.find((basketItem) => basketItem.id === product.id);
+    if (item) {
+      item.setProductInfo(product);
     }
+  }
+
+  addProduct(product: Product, quantity: number = 1) {
+    let item = this.items.find((basketItem) => basketItem.id === product.id);
+    if (!item) {
+      item = new BasketItem({ id: product.id, quantity: 0 });
+      item.setProductInfo(product);
+      this.items = [...this.items, item];
+    }
+    item.addQuantity(quantity);
+  }
+
+  deleteProduct(product: Product) {
+    this.items = this.items.filter((basketItem) => basketItem.id !== product.id);
   }
 }
 
@@ -30,9 +42,8 @@ export class BasketItem {
   title: string;
   price: number;
   quantity: number;
-  totalPrice: number;
 
-  constructor(data?: Product) {
+  constructor(data?: BasketItemDto) {
     if (!data) {
       return;
     }
@@ -40,6 +51,15 @@ export class BasketItem {
   }
 
   getTotalPrice(): number {
-    return (this.totalPrice = this.price * this.quantity);
+    return this.price * this.quantity;
+  }
+
+  setProductInfo(product: Product) {
+    this.title = product.title;
+    this.price = product.price || 0;
+  }
+
+  addQuantity(quantity: number) {
+    this.quantity += quantity;
   }
 }

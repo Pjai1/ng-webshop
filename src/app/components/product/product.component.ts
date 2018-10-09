@@ -14,11 +14,9 @@ export class ProductComponent {
   product: Product;
   quantity: number;
 
-  constructor(private basketService: BasketService, private serviceBus: ServiceBus) {}
+  constructor(private serviceBus: ServiceBus) {}
 
   onAddProduct(): void {
-    this.basketService.addToBasket(this.product, this.quantity).subscribe((basket) => {
-      this.serviceBus.publish('addProductToBasket', basket);
-    });
+    this.serviceBus.publish('addProductToBasket', { product: this.product, quantity: this.quantity });
   }
 }

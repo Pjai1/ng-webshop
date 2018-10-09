@@ -11,18 +11,7 @@ export class BasketItemDto {
   quantity: number;
 }
 
-export class BasketDto {
-  items: BasketItemDto[] = [];
-
-  constructor(data?: any) {
-    if (!data) {
-      return;
-    }
-    data.forEach((item: BasketItemDto) => {
-      this.items.push(item);
-    });
-  }
-}
+export interface BasketDto extends Array<BasketItemDto> {}
 
 const basketUrl = `${environment.apiBaseUrl}/basket/${environment.basketKey}`;
 
@@ -33,37 +22,33 @@ export class BasketService {
   constructor(private http: HttpClient) {}
 
   getBasket(): Observable<Basket> {
-    return this.http.get<BasketItemDto[]>(basketUrl).pipe(
+    return this.http.get<BasketDto>(basketUrl).pipe(
       map((data) => {
-        const basketDto = new BasketDto(data);
-        return new Basket(<any>basketDto);
+        return new Basket(data);
       }),
     );
   }
 
   addToBasket(product: Product, quantity: number): Observable<Basket> {
-    return this.http.post<BasketItemDto[]>(`${basketUrl}/product/${product.id}`, { quantity: quantity }).pipe(
+    return this.http.post<BasketDto>(`${basketUrl}/product/${product.id}`, { quantity: quantity }).pipe(
       map((data) => {
-        const basketDto = new BasketDto(data);
-        return new Basket(<any>basketDto);
+        return new Basket(data);
       }),
     );
   }
 
   deleteBasket(): Observable<Basket> {
-    return this.http.delete<BasketItemDto[]>(basketUrl).pipe(
+    return this.http.delete<BasketDto>(basketUrl).pipe(
       map((data) => {
-        // although we get the deleted basket back, we have no use for it
-        return new Basket();
+        return new Basket(data);
       }),
     );
   }
 
   deleteProductFromBasket(product: Product): Observable<Basket> {
-    return this.http.delete<BasketItemDto[]>(`${basketUrl}/product/${product.id}`).pipe(
+    return this.http.delete<BasketDto>(`${basketUrl}/product/${product.id}`).pipe(
       map((data) => {
-        const basketDto = new BasketDto(data);
-        return new Basket(<any>basketDto);
+        return new Basket(data);
       }),
     );
   }
