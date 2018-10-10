@@ -1,4 +1,4 @@
-<h1>{{product.id ? 'Product '+product.id : 'New Product'}}</h1>
+<h1>{{productId ? 'Product '+productId : 'New Product'}}</h1>
 
 <form [formGroup]="productForm"
       (ngSubmit)="onSubmit(productForm)">
@@ -43,10 +43,10 @@
   </div>
   <div class="form-group">
     <label for="desc">Description</label>
-    <input type="text"
-           formControlName="desc"
-           class="form-control"
-           id="desc">
+    <textarea type="text"
+              formControlName="desc"
+              class="form-control"
+              id="desc"></textarea>
 
   </div>
   <div class="form-group">
@@ -57,7 +57,7 @@
            id="stocked">
   </div>
   <div class="form-group"
-       *ngIf="product.id">
+       *ngIf="productId">
     <label for="image">Image</label>
     <input type="text"
            formControlName="image"
@@ -65,7 +65,7 @@
            id="image">
   </div>
   <div class="button-grid"
-       [ngClass]="product.id ? null : 'two-button-grid'">
+       [ngClass]="productId ? null : 'two-button-grid'">
     <button (click)="onCancel()"
             type="button"
             class="btn btn-primary">
@@ -75,7 +75,7 @@
             class="btn btn-success">
       Save
     </button>
-    <button *ngIf="product.id"
+    <button *ngIf="productId"
             (click)="onDelete(product)"
             type="button"
             class="btn btn-danger">

@@ -1,29 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../shared/services/product.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../shared/models/product.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { ServiceBus } from '../../serviceBus';
+import * as fromProduct from '../../store/product/product.reducers';
+import * as fromProductRoot from '../../store/product/index';
+import { Store, select } from '@ngrx/store';
+import { GetProductAction, SaveProductAction, DeleteProductAction } from 'src/app/store/product/product.actions';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-detail',
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent implements OnInit, OnDestroy {
   product: Product;
   productForm: FormGroup;
+  productId: number;
+  subscription?: Subscription;
 
-  constructor(
-    private productService: ProductService,
-    private route: ActivatedRoute,
-    private location: Location,
-    private toastr: ToastrService,
-    private serviceBus: ServiceBus,
-  ) {
+  constructor(private location: Location, private toastr: ToastrService, private store: Store<fromProduct.State>) {
     this.productForm = new FormGroup({
       sku: new FormControl(''),
       title: new FormControl('', [Validators.required]),
@@ -36,24 +35,30 @@ export class ProductDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const productId = this.route.snapshot.params.id;
+    this.subscription = this.store
+      .pipe(
+        select('router'),
+        first(),
+      )
+      .subscribe((router) => (this.productId = router.state.root.firstChild.params.id));
 
-    this.product = new Product();
-    if (productId) {
-      this.getProduct(productId);
+    this.subscription = this.store
+      .pipe<Product>(select(fromProductRoot.getProductEntitiesState))
+      .subscribe((product) => {
+        this.product = product;
+        if (product) {
+          console.log('got the product', product);
+          return this.productForm.patchValue(this.product);
+        }
+      });
+
+    // this.store.dispatch(new GetProductAction(this.productId));
+  }
+
+  onDelete(): void {
+    if (this.product) {
+      this.store.dispatch(new DeleteProductAction(this.product));
     }
-  }
-
-  getProduct(productId: number): void {
-    this.productService.getProduct(productId).subscribe((retrievedProduct) => {
-      this.product = retrievedProduct;
-      this.productForm.patchValue(this.product);
-    });
-  }
-
-  onDelete(product: Product): void {
-    this.serviceBus.publish('deleteProduct', product);
-    this.location.back();
   }
 
   onSubmit(productForm: FormGroup): void {
@@ -62,22 +67,17 @@ export class ProductDetailComponent implements OnInit {
       return;
     }
 
-    this.productForm.value.stocked = this.productForm.value.stocked.toLowerCase() === 'true' ? true : false;
-    this.product = Object.assign(this.product, this.productForm.value);
-    console.log('putting this product ' + JSON.stringify(this.product));
-
-    this.productService.saveProduct(this.product).subscribe((product) => {
-      this.product = product;
-      this.toastr.success(`Product ${product.sku} successfully updated.`);
-      this.location.back();
-    });
+    const oldProduct = Object.assign(new Product(), this.product, this.productForm.value);
+    this.store.dispatch(new SaveProductAction(oldProduct));
   }
 
   onCancel(): void {
     this.location.back();
   }
 
-  mergeFormAndProduct(formData: FormData, product: Product) {
-    return Object.assign(formData, product);
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

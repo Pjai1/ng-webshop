@@ -7,6 +7,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
 
 import { AppComponent } from './app.component';
 import { ProductTableComponent } from './components/productsTable/product-table.component';
@@ -27,6 +28,7 @@ import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './store';
 import { environment } from 'src/environments/environment';
 import { ProductEffects } from './store/product/product.effects';
+import { FormStateDataDirective } from './shared/directives/formStateData.directive';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,7 @@ import { ProductEffects } from './store/product/product.effects';
     SortableColumnComponent,
     SortableTableDirective,
     BasketComponent,
+    FormStateDataDirective,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),
@@ -61,6 +64,7 @@ import { ProductEffects } from './store/product/product.effects';
       logOnly: !environment.production,
     }),
     EffectsModule.forRoot([ProductEffects]),
+    StoreRouterConnectingModule.forRoot(),
   ],
   providers: [
     {

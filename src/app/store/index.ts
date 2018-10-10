@@ -1,7 +1,9 @@
 import * as fromProduct from './product/product.reducers';
-import { ActionReducerMap, MetaReducer, ActionReducer, createFeatureSelector } from '@ngrx/store';
+import * as fromMessage from './message/message.reducers';
+import { ActionReducerMap, MetaReducer, ActionReducer } from '@ngrx/store';
 import { environment } from 'src/environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
+import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 
 // console.log all actions
 export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
@@ -19,12 +21,14 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
 
 export interface State {
   products: fromProduct.State;
+  messages: fromMessage.State;
+  router: RouterReducerState;
 }
 
 export const reducers: ActionReducerMap<State> = {
   products: fromProduct.productsReducer,
+  messages: fromMessage.messagesReducer,
+  router: routerReducer,
 };
-
-export const getLayoutState = createFeatureSelector<State, fromProduct.State>('products');
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [logger, storeFreeze] : [];

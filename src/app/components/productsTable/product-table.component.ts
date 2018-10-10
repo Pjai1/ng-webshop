@@ -1,54 +1,42 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProductService } from '../../shared/services/product.service';
 import { Product } from '../../shared/models/product.model';
-import { ToastrService } from 'ngx-toastr';
+import * as fromProduct from '../../store/product/product.reducers';
+import * as fromProductRoot from '../../store/product/index';
 import { SortEvent } from '../../shared/components/sortableColumn/sort.service';
 import { ServiceBus } from '../../serviceBus';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { GetProductsAction } from 'src/app/store/product/product.actions';
 
 @Component({
   selector: 'app-product-table',
   templateUrl: './product-table.component.html',
   styleUrls: ['./product-table.component.scss'],
 })
-export class ProductTableComponent implements OnInit, OnDestroy {
-  products: Product[] = [];
+export class ProductTableComponent implements OnInit {
+  products$: Observable<Product[]>;
   subscription: Subscription;
 
-  constructor(private productService: ProductService, private toastr: ToastrService, private serviceBus: ServiceBus) {}
-
-  ngOnInit(): void {
-    this.subscription = this.serviceBus.listenForAll().subscribe((event) => {
-      if (event.type === 'productDeleted') {
-        this.productService.deleteProduct(event.data).subscribe((deletedProduct) => {
-          this.products = this.products.filter((item) => item.id !== event.data.id);
-          this.toastr.success(`Product ${event.data.sku} successfully deleted.`);
-        });
-      }
-    });
-
-    this.showTable();
+  constructor(private productService: ProductService, private store: Store<fromProduct.State>) {
+    this.products$ = this.store.pipe(select(fromProductRoot.getProductsEntitiesState));
   }
 
-  showTable(): void {
-    this.getProducts();
-  }
+  ngOnInit(): void {}
 
   getProducts(sortProperty: string = ''): void {
     this.productService.getProducts(sortProperty).subscribe((data: any) => {
-      this.products = data;
+      this.products$ = data;
     });
   }
 
   deleteProduct(product: Product): void {
-    this.serviceBus.publish('deleteProduct', product);
+    if (this.product) {
+      this.store.dispatch(new DeleteProductAction(this.product));
+    }
   }
 
   onSorted(event: SortEvent): void {
     this.getProducts(event.sortExpression);
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
   }
 }

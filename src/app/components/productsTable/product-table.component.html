@@ -37,7 +37,7 @@
       </th>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products">
+      <tr *ngFor="let product of products$ | async">
         <td><a routerLink="/product/{{product.id}}">{{product.id}}</a></td>
         <td>{{product.sku}}</td>
         <td>{{product.title}}</td>
