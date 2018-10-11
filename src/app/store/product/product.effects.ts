@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Effect, ofType, Actions } from '@ngrx/effects';
 import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
-import { mergeMap, map } from 'rxjs/operators';
+import { Action, Store } from '@ngrx/store';
+import { mergeMap, map, switchMap, tap } from 'rxjs/operators';
 import { ProductService } from 'src/app/shared/services/product.service';
 import { Product } from 'src/app/shared/models/product.model';
+import * as fromBasket from '../../store/basket/basket.reducers';
 import {
   GET_PRODUCTS,
   GET_PRODUCTS_SUCCESS,
@@ -13,11 +14,15 @@ import {
   GetProductAction,
   GetProductsAction,
   SAVE_PRODUCT,
-  SAVE_PRODUCT_SUCCESS,
   SaveProductAction,
   DELETE_PRODUCT,
-  DELETE_PRODUCT_SUCCESS,
+  DeleteProductSuccessAction,
+  SaveProductSuccessAction,
+  SaveProductToItemsAction,
+  DeleteProductFromItemsAction,
 } from './product.actions';
+import { ServiceBus } from 'src/app/serviceBus';
+import { DeleteProductFromBasketAction } from '../basket/basket.actions';
 
 @Injectable()
 export class ProductEffects {
@@ -26,7 +31,7 @@ export class ProductEffects {
     ofType(GET_PRODUCTS),
     mergeMap((action: GetProductsAction) => {
       return this.productService
-        .getProducts()
+        .getProducts(action.payload)
         .pipe(map((products: Product[]) => ({ type: GET_PRODUCTS_SUCCESS, payload: products })));
     }),
   );
@@ -49,7 +54,7 @@ export class ProductEffects {
       console.log(action);
       return this.productService
         .saveProduct(action.payload)
-        .pipe(map((product: Product) => ({ type: SAVE_PRODUCT_SUCCESS, payload: product })));
+        .pipe(switchMap((product) => [new SaveProductSuccessAction(product), new SaveProductToItemsAction(product)]));
     }),
   );
 
@@ -58,11 +63,21 @@ export class ProductEffects {
     ofType(DELETE_PRODUCT),
     mergeMap((action: SaveProductAction) => {
       console.log(action);
-      return this.productService
-        .deleteProduct(action.payload)
-        .pipe(map((product: Product) => ({ type: DELETE_PRODUCT_SUCCESS, payload: product })));
+      return this.productService.deleteProduct(action.payload).pipe(
+        tap((product) => this.store.dispatch(new DeleteProductFromBasketAction(<any>product))),
+        switchMap((product) => [
+          // new DeleteProductFromBasketAction(product),
+
+          new DeleteProductFromItemsAction(product),
+          new DeleteProductSuccessAction(product),
+        ]),
+      );
     }),
   );
 
-  constructor(private productService: ProductService, private actions$: Actions) {}
+  constructor(
+    private productService: ProductService,
+    private actions$: Actions,
+    private store: Store<fromBasket.State>,
+  ) {}
 }

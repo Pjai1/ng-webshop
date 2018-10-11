@@ -58,6 +58,7 @@ export class ProductService {
 
   saveProduct(product: Product): Observable<Product> {
     if (product.isNew()) {
+      console.log('creating product');
       return this.createProduct(product);
     }
     return this.updateProduct(product);

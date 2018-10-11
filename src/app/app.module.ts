@@ -29,6 +29,7 @@ import { reducers, metaReducers } from './store';
 import { environment } from 'src/environments/environment';
 import { ProductEffects } from './store/product/product.effects';
 import { FormStateDataDirective } from './shared/directives/formStateData.directive';
+import { BasketEffects } from './store/basket/basket.effects';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,7 @@ import { FormStateDataDirective } from './shared/directives/formStateData.direct
       name: 'Euricom Webshop',
       logOnly: !environment.production,
     }),
-    EffectsModule.forRoot([ProductEffects]),
+    EffectsModule.forRoot([ProductEffects, BasketEffects]),
     StoreRouterConnectingModule.forRoot(),
   ],
   providers: [

@@ -8,6 +8,8 @@ import {
   SAVE_PRODUCT_SUCCESS,
   DELETE_PRODUCT,
   DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FROM_ITEMS,
+  SAVE_PRODUCT_TO_ITEMS,
 } from './product.actions';
 import { Product } from 'src/app/shared/models/product.model';
 
@@ -59,12 +61,34 @@ export function productsReducer(state: State = initialState, action: ProductActi
         ...state,
       };
 
+    case SAVE_PRODUCT_TO_ITEMS:
+      const savedItem = state.items.find((item) => item.id === action.payload.id);
+      if (savedItem) {
+        return {
+          ...state,
+          items: state.items.map((item) => {
+            if (item.id === action.payload.id) {
+              return action.payload;
+            }
+            return item;
+          }),
+        };
+      }
+      return {
+        ...state,
+      };
+
     case DELETE_PRODUCT_SUCCESS:
       return {
         ...state,
         currentProduct: null,
       };
 
+    case DELETE_PRODUCT_FROM_ITEMS:
+      return {
+        ...state,
+        items: state.items.filter((product) => product.id !== action.payload.id),
+      };
     default:
       return state;
   }

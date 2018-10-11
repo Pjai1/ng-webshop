@@ -1,5 +1,6 @@
 import * as fromProduct from './product/product.reducers';
 import * as fromMessage from './message/message.reducers';
+import * as fromBasket from './basket/basket.reducers';
 import { ActionReducerMap, MetaReducer, ActionReducer } from '@ngrx/store';
 import { environment } from 'src/environments/environment';
 import { storeFreeze } from 'ngrx-store-freeze';
@@ -20,12 +21,14 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
 }
 
 export interface State {
+  basket: fromBasket.State;
   products: fromProduct.State;
   messages: fromMessage.State;
   router: RouterReducerState;
 }
 
 export const reducers: ActionReducerMap<State> = {
+  basket: fromBasket.basketReducer,
   products: fromProduct.productsReducer,
   messages: fromMessage.messagesReducer,
   router: routerReducer,

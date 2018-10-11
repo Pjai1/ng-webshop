@@ -9,9 +9,13 @@ export const SAVE_PRODUCT = 'Save Product';
 export const SAVE_PRODUCT_SUCCESS = 'Save Product Success';
 export const DELETE_PRODUCT = 'Delete Product';
 export const DELETE_PRODUCT_SUCCESS = 'Delete Product Success';
+export const DELETE_PRODUCT_FROM_ITEMS = 'Delete Product From Items';
+export const SAVE_PRODUCT_TO_ITEMS = 'Save Product To Items';
 
 export class GetProductsAction implements Action {
   readonly type = GET_PRODUCTS;
+
+  constructor(public payload?: string) {}
 }
 
 export class GetProductsSuccessAction implements Action {
@@ -44,6 +48,12 @@ export class SaveProductSuccessAction implements Action {
   constructor(public payload: Product) {}
 }
 
+export class SaveProductToItemsAction implements Action {
+  readonly type = SAVE_PRODUCT_TO_ITEMS;
+
+  constructor(public payload: Product) {}
+}
+
 export class DeleteProductAction implements Action {
   readonly type = DELETE_PRODUCT;
 
@@ -56,6 +66,12 @@ export class DeleteProductSuccessAction implements Action {
   constructor(public payload: Product) {}
 }
 
+export class DeleteProductFromItemsAction implements Action {
+  readonly type = DELETE_PRODUCT_FROM_ITEMS;
+
+  constructor(public payload: Product) {}
+}
+
 export type ProductActions =
   | GetProductsAction
   | GetProductsSuccessAction
@@ -64,4 +80,6 @@ export type ProductActions =
   | SaveProductAction
   | SaveProductSuccessAction
   | DeleteProductAction
-  | DeleteProductSuccessAction;
+  | DeleteProductSuccessAction
+  | DeleteProductFromItemsAction
+  | SaveProductToItemsAction;

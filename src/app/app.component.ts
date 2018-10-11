@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as fromRoot from './store/index';
 import { Store } from '@ngrx/store';
 import { GetProductsAction } from './store/product/product.actions';
+import { GetBasketAction } from './store/basket/basket.actions';
 
 @Component({
   selector: 'app-root',
@@ -10,15 +11,11 @@ import { GetProductsAction } from './store/product/product.actions';
 })
 export class AppComponent implements OnInit {
   title = 'webshop-app';
-  openPanel = true;
 
   constructor(private store: Store<fromRoot.State>) {}
 
   ngOnInit(): void {
     this.store.dispatch(new GetProductsAction());
-  }
-
-  toggleViews(): void {
-    this.openPanel = !this.openPanel;
+    this.store.dispatch(new GetBasketAction());
   }
 }

@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Product } from '../../shared/models/product.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
@@ -8,7 +7,7 @@ import { Subscription } from 'rxjs';
 import * as fromProduct from '../../store/product/product.reducers';
 import * as fromProductRoot from '../../store/product/index';
 import { Store, select } from '@ngrx/store';
-import { GetProductAction, SaveProductAction, DeleteProductAction } from 'src/app/store/product/product.actions';
+import { SaveProductAction, DeleteProductAction } from 'src/app/store/product/product.actions';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -51,8 +50,6 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
           return this.productForm.patchValue(this.product);
         }
       });
-
-    // this.store.dispatch(new GetProductAction(this.productId));
   }
 
   onDelete(): void {
@@ -66,7 +63,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       this.toastr.error('Please fill in all required fields');
       return;
     }
-
+    // make sure stocked is actually a boolean
+    this.productForm.value.stocked = this.productForm.value.stocked.toLowerCase() === 'true' ? true : false;
+    // make sure basePrice has a value, can't really send an empty string
+    if (!this.productForm.value.basePrice) {
+      this.productForm.value.basePrice = this.productForm.value.price;
+    }
     const oldProduct = Object.assign(new Product(), this.product, this.productForm.value);
     this.store.dispatch(new SaveProductAction(oldProduct));
   }

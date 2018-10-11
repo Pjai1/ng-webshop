@@ -29,8 +29,8 @@ export class BasketService {
     );
   }
 
-  addToBasket(product: Product, quantity: number): Observable<Basket> {
-    return this.http.post<BasketDto>(`${basketUrl}/product/${product.id}`, { quantity: quantity }).pipe(
+  addToBasket(productId: number, quantity: number): Observable<Basket> {
+    return this.http.post<BasketDto>(`${basketUrl}/product/${productId}`, { quantity: quantity }).pipe(
       map((data) => {
         return new Basket(data);
       }),
