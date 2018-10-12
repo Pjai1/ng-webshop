@@ -1,11 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Product } from '../../shared/models/product.model';
-import { ServiceBus } from '../../serviceBus';
 import { Store, select } from '@ngrx/store';
-import * as fromProduct from '../../store/product/product.reducers';
-import { SaveProductToBasketAction, BasketClickedAction } from 'src/app/store/basket/basket.actions';
-import { Observable } from 'rxjs';
-import * as fromBasketRoot from '../../store/basket/index';
 
 @Component({
   selector: 'app-product',
@@ -16,21 +11,10 @@ export class ProductComponent implements OnInit {
   @Input()
   product: Product;
   quantity = 1;
-  modalClicked$: Observable<boolean>;
-  modalClicked: boolean;
 
-  constructor(private store: Store<fromProduct.State>) {
-    this.modalClicked$ = store.pipe(select(fromBasketRoot.getBasketClickedState));
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-    this.modalClicked$.subscribe((click) => (this.modalClicked = click));
-  }
+  ngOnInit(): void {}
 
-  onAddProduct(): void {
-    this.store.dispatch(new SaveProductToBasketAction({ id: this.product.id, quantity: this.quantity }));
-    if (!this.modalClicked) {
-      this.store.dispatch(new BasketClickedAction());
-    }
-  }
+  onAddProduct(): void {}
 }

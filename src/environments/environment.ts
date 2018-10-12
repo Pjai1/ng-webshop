@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  graphQlUrl: 'http://localhost:3000/graphql',
   apiBaseUrl: 'http://localhost:3000/api',
   basketKey: 'joswashere',
 };

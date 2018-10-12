@@ -7,7 +7,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule, routerReducer } from '@ngrx/router-store';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
+import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { AppComponent } from './app.component';
 import { ProductTableComponent } from './components/productsTable/product-table.component';
@@ -52,6 +55,8 @@ import { BasketEffects } from './store/basket/basket.effects';
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,
+    ApolloModule,
+    HttpLinkModule,
     ToastrModule.forRoot({
       timeOut: 10000,
       positionClass: 'toast-top-right',
@@ -68,6 +73,20 @@ import { BasketEffects } from './store/basket/basket.effects';
     StoreRouterConnectingModule.forRoot(),
   ],
   providers: [
+    [
+      {
+        provide: APOLLO_OPTIONS,
+        useFactory(httplink: HttpLink) {
+          return {
+            cache: new InMemoryCache(),
+            link: httplink.create({
+              uri: environment.graphQlUrl,
+            }),
+          };
+        },
+        deps: [HttpLink],
+      },
+    ],
     {
       provide: HTTP_INTERCEPTORS,
       useClass: ErrorInterceptor,

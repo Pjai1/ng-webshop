@@ -1,53 +1,43 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Basket } from '../../shared/models/basket.model';
-import { ServiceBus } from '../../serviceBus';
-import { Subscription, Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import * as fromBasket from '../../store/basket/basket.reducers';
-import * as fromBasketRoot from '../../store/basket/index';
-import {
-  DeleteBasketAction,
-  DeleteProductFromBasketAction,
-  BasketClickedAction,
-} from 'src/app/store/basket/basket.actions';
+import { Component, OnInit } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
+import { environment } from 'src/environments/environment';
+import { CreateBasket } from 'src/app/shared/selectors/basket.selector';
+import { Query, Basket } from 'src/graphql-types';
 
 @Component({
   selector: 'app-basket',
   templateUrl: './basket.component.html',
   styleUrls: ['./basket.component.scss'],
 })
-export class BasketComponent implements OnInit, OnDestroy {
+export class BasketComponent implements OnInit {
   basket: Basket;
-  modalClicked$: Observable<boolean>;
-  modalClicked: boolean;
-  subscription?: Subscription;
-  basket$: Observable<Basket>;
+  modalClicked = false;
 
-  constructor(private serviceBus: ServiceBus, private store: Store<fromBasket.State>) {
-    this.basket$ = store.pipe(select(fromBasketRoot.getBasketWithProductsState));
-    this.modalClicked$ = store.pipe(select(fromBasketRoot.getBasketClickedState));
-  }
+  constructor(private apollo: Apollo) {}
 
   ngOnInit(): void {
-    this.subscription = this.modalClicked$.subscribe((click) => (this.modalClicked = click));
-
-    this.subscription = this.basket$.subscribe((basket) => {
-      console.log('got basket', basket);
-      this.basket = basket;
-    });
+    this.apollo
+      .watchQuery<Query>({
+        query: gql`
+        {
+          basket(checkoutID: "${environment.basketKey}"){
+            items {
+              quantity
+              product {id title price}
+            }
+          }
+        }
+        `,
+      })
+      .valueChanges.subscribe((result) => {
+        this.basket = CreateBasket(result.data.basket);
+      });
   }
 
   onOpen(): void {
-    this.store.dispatch(new BasketClickedAction());
+    this.modalClicked = !this.modalClicked;
   }
 
-  onClear(): void {
-    this.store.dispatch(new DeleteBasketAction());
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
+  onClear(): void {}
 }

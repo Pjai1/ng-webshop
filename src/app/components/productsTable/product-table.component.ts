@@ -1,47 +1,47 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ProductService } from '../../shared/services/product.service';
+import { Component, OnInit } from '@angular/core';
 import { Product } from '../../shared/models/product.model';
-import * as fromProduct from '../../store/product/product.reducers';
-import * as fromProductRoot from '../../store/product/index';
 import { SortEvent } from '../../shared/components/sortableColumn/sort.service';
-import { Subscription, Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { DeleteProductAction, GetProductsAction } from 'src/app/store/product/product.actions';
-import { takeUntil } from 'rxjs/operators';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
+import { Query } from 'src/graphql-types';
+import { CreateProducts } from 'src/app/shared/selectors/product.selector';
 
 @Component({
   selector: 'app-product-table',
   templateUrl: './product-table.component.html',
   styleUrls: ['./product-table.component.scss'],
 })
-export class ProductTableComponent implements OnInit, OnDestroy {
-  products: Product[];
-  products$: Observable<Product[]>;
-  subscription: Subscription;
+export class ProductTableComponent implements OnInit {
+  products: any;
 
-  constructor(private store: Store<fromProduct.State>) {
-    this.products$ = store.pipe(select(fromProductRoot.getProductsEntitiesState));
-  }
+  constructor(private apollo: Apollo) {}
 
   ngOnInit(): void {
-    this.subscription = this.products$
-      .pipe<Product[]>(select(fromProductRoot.getProductsEntitiesState))
-      .subscribe((products) => {
-        this.products = products;
+    this.apollo
+      .watchQuery<Query>({
+        query: gql`
+          {
+            allProducts {
+              edges {
+                node {
+                  id
+                  sku
+                  title
+                  price
+                  basePrice
+                  stocked
+                }
+              }
+            }
+          }
+        `,
+      })
+      .valueChanges.subscribe((result) => {
+        this.products = CreateProducts(result.data.allProducts);
       });
   }
 
-  deleteProduct(product: Product): void {
-    this.store.dispatch(new DeleteProductAction(product));
-  }
+  deleteProduct(product: Product): void {}
 
-  onSorted(event: SortEvent): void {
-    this.store.dispatch(new GetProductsAction(event.sortExpression));
-  }
-
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
+  onSorted(event: SortEvent): void {}
 }
