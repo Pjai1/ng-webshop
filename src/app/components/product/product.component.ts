@@ -3,7 +3,7 @@ import { Product } from '../../shared/models/product.model';
 import { ServiceBus } from '../../serviceBus';
 import { Store, select } from '@ngrx/store';
 import * as fromProduct from '../../store/product/product.reducers';
-import { SaveProductToBasketAction } from 'src/app/store/basket/basket.actions';
+import { SaveProductToBasketAction, BasketClickedAction } from 'src/app/store/basket/basket.actions';
 import { Observable } from 'rxjs';
 import * as fromBasketRoot from '../../store/basket/index';
 
@@ -29,6 +29,8 @@ export class ProductComponent implements OnInit {
 
   onAddProduct(): void {
     this.store.dispatch(new SaveProductToBasketAction({ id: this.product.id, quantity: this.quantity }));
-    // if (this.modalClicked)
+    if (!this.modalClicked) {
+      this.store.dispatch(new BasketClickedAction());
+    }
   }
 }

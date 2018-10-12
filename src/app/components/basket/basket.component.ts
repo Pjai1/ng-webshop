@@ -29,14 +29,6 @@ export class BasketComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.subscription = this.serviceBus.listenForAll().subscribe((event) => {
-    //   if (event.type === 'openBasket') {
-    //     this.modalClicked = !this.modalClicked;
-    //   }
-    //   if (event.type === 'deleteProduct') {
-    //     this.store.dispatch(new DeleteProductFromBasketAction(event.data));
-    //   }
-    // });
     this.subscription = this.modalClicked$.subscribe((click) => (this.modalClicked = click));
 
     this.subscription = this.basket$.subscribe((basket) => {
@@ -46,7 +38,6 @@ export class BasketComponent implements OnInit, OnDestroy {
   }
 
   onOpen(): void {
-    // this.serviceBus.publish('openBasket', this.basket);
     this.store.dispatch(new BasketClickedAction());
   }
 
