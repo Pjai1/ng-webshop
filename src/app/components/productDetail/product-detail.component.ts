@@ -63,6 +63,15 @@ export class ProductDetailComponent implements OnInit {
 
   onDelete(): void {
     if (this.product) {
+      this.apollo.mutate({
+        mutation: gql`mutation {
+          deleteProduct(id: ${this.productId}) {
+            product {
+              id
+            }
+          }
+        }`,
+      });
     }
   }
 
@@ -77,6 +86,34 @@ export class ProductDetailComponent implements OnInit {
     if (!this.productForm.value.basePrice) {
       this.productForm.value.basePrice = this.productForm.value.price;
     }
+    this.productForm.value.sku = this.productForm.value.sku.toString();
+    console.log(this.productForm.value.sku);
+
+    this.apollo
+      .mutate({
+        mutation: gql`
+          mutation {
+            addOrUpdateProduct(input: {
+              sku: ${this.productForm.value.sku},
+              title: ${this.productForm.value.title},
+              price: ${this.productForm.value.price},
+              desc: ${this.productForm.value.description},
+              basePrice: ${this.productForm.value.basePrice},
+              stocked: ${this.productForm.value.stocked}
+            }) {
+              product {
+                id
+                title
+                price
+              }
+            }
+          }
+        `,
+      })
+      .subscribe((result) => {
+        console.log('product added', result);
+        this.location.back();
+      });
   }
 
   onCancel(): void {

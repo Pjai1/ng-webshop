@@ -41,7 +41,18 @@ export class ProductTableComponent implements OnInit {
       });
   }
 
-  deleteProduct(product: Product): void {}
+  deleteProduct(product: Product): void {
+    this.apollo
+      .mutate({
+        mutation: gql`mutation {
+        deleteProduct(id: ${product.id}) {
+          product {
+            id
+          }
+        }`,
+      })
+      .subscribe((result) => this.products.filter((item) => item.id !== product.id));
+  }
 
   onSorted(event: SortEvent): void {}
 }
