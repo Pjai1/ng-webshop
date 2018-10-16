@@ -15,6 +15,8 @@ const initialState: State = {
   basketOpen: false,
 };
 
+// TODO: Add some unit tests to test reducer
+
 export function basketReducer(state: State = initialState, action: BasketActions): State {
   switch (action.type) {
     case BasketTypes.BASKET_CLICKED:
@@ -69,7 +71,7 @@ export function basketReducer(state: State = initialState, action: BasketActions
     case BasketTypes.DELETE_PRODUCT_FROM_BASKET_SUCCESS:
       return {
         ...state,
-        items: <any>Object.assign({}, action.payload),
+        items: action.payload,
       };
     default:
       return state;

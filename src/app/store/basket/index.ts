@@ -29,15 +29,17 @@ export const getBasketWithProductsState = createSelector(
             total: item.quantity * basketItem.price,
           };
         }
-        return {
-          total: 0,
-        };
+        return { total: 0 };
       });
       const totalPrice = basketItems.reduce((acc, item) => acc + item.total, 0);
-      return {
-        basketItems,
-        totalPrice,
-      };
+      return { basketItems, totalPrice };
     }
+
+    // FIXME: return empty basket (null pattern)
+    // so also basket?.basketItems in view
+    // return {
+    //   basketItems: [],
+    //   totalPrice: 0
+    // }
   },
 );

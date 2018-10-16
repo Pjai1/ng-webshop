@@ -1,6 +1,7 @@
 import { Product } from './product.model';
 import { BasketDto, BasketItemDto } from '../services/basket.service';
 
+// FIXME: don't use models anymore
 export class Basket {
   items?: BasketItem[] = [];
 
@@ -37,6 +38,7 @@ export class Basket {
   }
 }
 
+// FIXME: don't use models anymore
 export class BasketItem {
   id: number;
   title: string;

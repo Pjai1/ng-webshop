@@ -8,13 +8,22 @@ import {
   SAVE_PRODUCT_SUCCESS,
   DELETE_PRODUCT,
   DELETE_PRODUCT_SUCCESS,
-  DELETE_PRODUCT_FROM_ITEMS,
+  // DELETE_PRODUCT_FROM_ITEMS,
   SAVE_PRODUCT_TO_ITEMS,
 } from './product.actions';
 import { Product } from 'src/app/shared/models/product.model';
 
+// TODO:
+// export interface IProduct {
+//   id: string;
+//   ...
+// }
+
 export interface State {
+  // FIXME: don't use model, use IProduct
   items: Product[];
+
+  // FIXME: current product is not used anywhere, remove it
   currentProduct: Product;
 }
 
@@ -22,6 +31,8 @@ const initialState: State = {
   items: null,
   currentProduct: null,
 };
+
+// TODO: Add some unit tests to test reducer
 
 export function productsReducer(state: State = initialState, action: ProductActions): State {
   switch (action.type) {
@@ -82,13 +93,14 @@ export function productsReducer(state: State = initialState, action: ProductActi
       return {
         ...state,
         currentProduct: null,
-      };
-
-    case DELETE_PRODUCT_FROM_ITEMS:
-      return {
-        ...state,
         items: state.items.filter((product) => product.id !== action.payload.id),
       };
+
+    // case DELETE_PRODUCT_FROM_ITEMS:
+    //   return {
+    //     ...state,
+    //     items: state.items.filter((product) => product.id !== action.payload.id),
+    //   };
     default:
       return state;
   }

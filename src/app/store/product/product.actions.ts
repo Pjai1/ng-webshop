@@ -66,11 +66,11 @@ export class DeleteProductSuccessAction implements Action {
   constructor(public payload: Product) {}
 }
 
-export class DeleteProductFromItemsAction implements Action {
-  readonly type = DELETE_PRODUCT_FROM_ITEMS;
+// export class DeleteProductFromItemsAction implements Action {
+//   readonly type = DELETE_PRODUCT_FROM_ITEMS;
 
-  constructor(public payload: Product) {}
-}
+//   constructor(public payload: Product) {}
+// }
 
 export type ProductActions =
   | GetProductsAction
@@ -81,5 +81,5 @@ export type ProductActions =
   | SaveProductSuccessAction
   | DeleteProductAction
   | DeleteProductSuccessAction
-  | DeleteProductFromItemsAction
+  //  DeleteProductFromItemsAction
   | SaveProductToItemsAction;

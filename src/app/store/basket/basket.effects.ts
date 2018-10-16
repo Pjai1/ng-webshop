@@ -10,6 +10,8 @@ import {
   SaveProductToBasketAction,
   DeleteProductFromBasketAction,
 } from './basket.actions';
+
+import { DELETE_PRODUCT_SUCCESS } from '../product/product.actions';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { Basket } from 'src/app/shared/models/basket.model';
 
@@ -45,8 +47,8 @@ export class BasketEffects {
     }),
   );
 
+  @Effect()
   deleteProductFromBasket$: Observable<Action> = this.actions$.pipe(
-    tap((val) => console.log('wow', val)),
     ofType(BasketTypes.DELETE_PRODUCT_FROM_BASKET),
     mergeMap((action: DeleteProductFromBasketAction) => {
       return this.basketService

@@ -24,6 +24,7 @@ export class BasketService {
   getBasket(): Observable<Basket> {
     return this.http.get<BasketDto>(basketUrl).pipe(
       map((data) => {
+        // FIXME: don't use models anymore
         return new Basket(data);
       }),
     );
@@ -32,6 +33,7 @@ export class BasketService {
   addToBasket(productId: number, quantity: number): Observable<Basket> {
     return this.http.post<BasketDto>(`${basketUrl}/product/${productId}`, { quantity: quantity }).pipe(
       map((data) => {
+        // FIXME: don't use models anymore
         return new Basket(data);
       }),
     );
@@ -40,6 +42,7 @@ export class BasketService {
   deleteBasket(): Observable<Basket> {
     return this.http.delete<BasketDto>(basketUrl).pipe(
       map((data) => {
+        // FIXME: don't use models anymore
         return new Basket(data);
       }),
     );
@@ -48,6 +51,7 @@ export class BasketService {
   deleteProductFromBasket(product: Product): Observable<Basket> {
     return this.http.delete<BasketDto>(`${basketUrl}/product/${product.id}`).pipe(
       map((data) => {
+        // FIXME: don't use models anymore
         return new Basket(data);
       }),
     );

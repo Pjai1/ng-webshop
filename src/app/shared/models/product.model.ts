@@ -1,5 +1,6 @@
 import { IProductDto } from '../services/product.service';
 
+// FIXME: don't use models anymore
 export class Product {
   id: number;
   sku: string;

@@ -19,7 +19,6 @@ import {
   DeleteProductSuccessAction,
   SaveProductSuccessAction,
   SaveProductToItemsAction,
-  DeleteProductFromItemsAction,
 } from './product.actions';
 import { ServiceBus } from 'src/app/serviceBus';
 import { DeleteProductFromBasketAction } from '../basket/basket.actions';
@@ -65,12 +64,7 @@ export class ProductEffects {
       console.log(action);
       return this.productService.deleteProduct(action.payload).pipe(
         tap((product) => this.store.dispatch(new DeleteProductFromBasketAction(<any>product))),
-        switchMap((product) => [
-          // new DeleteProductFromBasketAction(product),
-
-          new DeleteProductFromItemsAction(product),
-          new DeleteProductSuccessAction(product),
-        ]),
+        switchMap((product) => [new DeleteProductSuccessAction(product)]),
       );
     }),
   );

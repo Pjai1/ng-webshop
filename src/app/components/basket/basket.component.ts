@@ -7,9 +7,11 @@ import * as fromBasket from '../../store/basket/basket.reducers';
 import * as fromBasketRoot from '../../store/basket/index';
 import {
   DeleteBasketAction,
-  DeleteProductFromBasketAction,
+  // DeleteProductFromBasketAction,
   BasketClickedAction,
 } from 'src/app/store/basket/basket.actions';
+
+// FIXME: avoid basket?.basketItems, better to apply null pattern
 
 @Component({
   selector: 'app-basket',
@@ -23,7 +25,10 @@ export class BasketComponent implements OnInit, OnDestroy {
   subscription?: Subscription;
   basket$: Observable<Basket>;
 
-  constructor(private serviceBus: ServiceBus, private store: Store<fromBasket.State>) {
+  constructor(
+    // private serviceBus: ServiceBus,
+    private store: Store<fromBasket.State>,
+  ) {
     this.basket$ = store.pipe(select(fromBasketRoot.getBasketWithProductsState));
     this.modalClicked$ = store.pipe(select(fromBasketRoot.getBasketClickedState));
   }

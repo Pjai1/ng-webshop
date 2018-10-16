@@ -60,7 +60,7 @@ export class DeleteProductFromBasketAction implements Action {
 export class DeleteProductFromBasketSuccessAction implements Action {
   readonly type = BasketTypes.DELETE_PRODUCT_FROM_BASKET_SUCCESS;
 
-  constructor(public payload: Basket) {}
+  constructor(public payload: BasketItem[]) {}
 }
 
 export type BasketActions =

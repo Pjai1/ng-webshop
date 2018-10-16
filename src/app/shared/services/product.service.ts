@@ -31,6 +31,7 @@ const productUrl = `${environment.apiBaseUrl}/products`;
 export class ProductService {
   constructor(private http: HttpClient) {}
 
+  // FIXME: return type Observable<IProductDto[]>
   getProducts(sortProperty?: string): Observable<Product[]> {
     sortProperty ? (sortProperty = sortProperty.trim()) : (sortProperty = null);
     const options = sortProperty
@@ -42,6 +43,7 @@ export class ProductService {
     return this.http.get<IProductsDto>(productUrl, options).pipe(
       map((data) => {
         return data.selectedProducts.map((dto) => {
+          // FIXME: don't use models anymore
           return new Product(<any>dto);
         });
       }),
@@ -51,6 +53,7 @@ export class ProductService {
   getProduct(id: number): Observable<Product> {
     return this.http.get<Product>(`${productUrl}/${id}`).pipe(
       map((data) => {
+        // FIXME: don't use models anymore
         return new Product(data);
       }),
     );
@@ -67,6 +70,7 @@ export class ProductService {
   updateProduct(product: Product): Observable<Product> {
     return this.http.put<IProductDto>(`${productUrl}/${product.id}`, product).pipe(
       map((data) => {
+        // FIXME: don't use models anymore
         return new Product(data);
       }),
     );
@@ -75,6 +79,7 @@ export class ProductService {
   createProduct(product: Product): Observable<Product> {
     return this.http.post<IProductDto>(productUrl, product).pipe(
       map((data) => {
+        // FIXME: don't use models anymore
         return new Product(data);
       }),
     );
@@ -83,6 +88,7 @@ export class ProductService {
   deleteProduct(product: Product): Observable<Product> {
     return this.http.delete<Product>(`${productUrl}/${product.id}`).pipe(
       map((data) => {
+        // FIXME: don't use models anymore
         return new Product(data);
       }),
     );
