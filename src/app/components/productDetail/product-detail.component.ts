@@ -6,6 +6,12 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { ActivatedRoute } from '@angular/router';
 import { Query, Product } from 'src/graphql-types';
+import { AddOrUpdateProductMutation } from 'src/app/shared/graphql/mutations/add-or-update-product.graphql';
+import { tap, map } from 'rxjs/operators';
+import { GetProductQuery } from 'src/app/shared/graphql/queries/product.graphql';
+import { Observable } from 'rxjs';
+import { IProduct } from 'src/app/shared/selectors/product.selector';
+import { DeleteProductMutation } from 'src/app/shared/graphql/mutations/delete-product.graphql';
 
 @Component({
   selector: 'app-product-detail',
@@ -13,7 +19,7 @@ import { Query, Product } from 'src/graphql-types';
   styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit {
-  product: Product;
+  product: IProduct;
   productForm: FormGroup;
   productId: number;
 
@@ -21,7 +27,9 @@ export class ProductDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private toastr: ToastrService,
-    private apollo: Apollo,
+    private addOrUpdateProductMutation: AddOrUpdateProductMutation,
+    private getProductQuery: GetProductQuery,
+    private deleteProductMutation: DeleteProductMutation,
   ) {
     this.productForm = new FormGroup({
       sku: new FormControl(''),
@@ -32,46 +40,27 @@ export class ProductDetailComponent implements OnInit {
       image: new FormControl({ value: '', disabled: true }),
       desc: new FormControl(''),
     });
-    this.productId = this.route.snapshot.params.id;
+    this.productId = parseInt(this.route.snapshot.params.id, 0);
   }
 
   ngOnInit(): void {
     if (this.productId) {
-      this.apollo
-        .watchQuery<Query>({
-          query: gql`
-            {
-              product(id: 1) {
-                id
-                sku
-                stocked
-                desc
-                image
-                title
-                price
-                basePrice
-              }
-            }
-          `,
-        })
-        .valueChanges.subscribe((result) => {
-          this.product = result.data.product;
-          this.productForm.patchValue(this.product);
-        });
+      this.getProductQuery.watch({ id: this.productId }).valueChanges.subscribe((result) => {
+        this.product = result.data.product;
+        this.productForm.patchValue(result.data.product);
+      });
     }
   }
 
   onDelete(): void {
     if (this.product) {
-      this.apollo.mutate({
-        mutation: gql`mutation {
-          deleteProduct(id: ${this.productId}) {
-            product {
-              id
-            }
-          }
-        }`,
-      });
+      this.deleteProductMutation
+        .mutate({
+          key: this.product.id,
+        })
+        .subscribe((result) => {
+          this.location.back();
+        });
     }
   }
 
@@ -81,39 +70,13 @@ export class ProductDetailComponent implements OnInit {
       return;
     }
     // make sure stocked is actually a boolean
-    this.productForm.value.stocked = this.productForm.value.stocked.toLowerCase() === 'true' ? true : false;
+    productForm.value.stocked = productForm.value.stocked.toString().toLowerCase() === 'true' ? true : false;
     // make sure basePrice has a value, can't really send an empty string
-    if (!this.productForm.value.basePrice) {
-      this.productForm.value.basePrice = this.productForm.value.price;
+    if (!productForm.value.basePrice) {
+      productForm.value.basePrice = productForm.value.price;
     }
-    this.productForm.value.sku = this.productForm.value.sku.toString();
-    console.log(this.productForm.value.sku);
-
-    this.apollo
-      .mutate({
-        mutation: gql`
-          mutation {
-            addOrUpdateProduct(input: {
-              sku: ${this.productForm.value.sku},
-              title: ${this.productForm.value.title},
-              price: ${this.productForm.value.price},
-              desc: ${this.productForm.value.description},
-              basePrice: ${this.productForm.value.basePrice},
-              stocked: ${this.productForm.value.stocked}
-            }) {
-              product {
-                id
-                title
-                price
-              }
-            }
-          }
-        `,
-      })
-      .subscribe((result) => {
-        console.log('product added', result);
-        this.location.back();
-      });
+    console.log('aaa', productForm.value);
+    this.addOrUpdateProductMutation.mutateProduct(productForm.value).subscribe((result) => console.log(result));
   }
 
   onCancel(): void {

@@ -8,7 +8,7 @@
          routerLink="/home">Home</a>
       <a class="navbar-brand"
          routerLink="/list">Product List</a>
-      <app-basket></app-basket>
+      <app-basket (addedProduct)="onProductAdded($event)"></app-basket>
     </nav>
   </div>
   <router-outlet></router-outlet>

@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { environment } from 'src/environments/environment';
-import { CreateBasket } from 'src/app/shared/selectors/basket.selector';
-import { Query, Basket } from 'src/graphql-types';
+import { CreateBasket, IBasket, ClearBasket } from 'src/app/shared/selectors/basket.selector';
+import { Query } from 'src/graphql-types';
+import { ClearBasketMutation } from 'src/app/shared/graphql/mutations/clear-basket.graphql';
+import { GetBasketQuery } from 'src/app/shared/graphql/queries/basket.graphql';
+import { Observable } from 'rxjs';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-basket',
@@ -11,33 +15,33 @@ import { Query, Basket } from 'src/graphql-types';
   styleUrls: ['./basket.component.scss'],
 })
 export class BasketComponent implements OnInit {
-  basket: Basket;
+  basket$: Observable<IBasket>;
+  basket: IBasket;
   modalClicked = false;
 
-  constructor(private apollo: Apollo) {}
+  constructor(private getBasketQuery: GetBasketQuery, private clearBasketMutation: ClearBasketMutation) {}
 
   ngOnInit(): void {
-    this.apollo
-      .watchQuery<Query>({
-        query: gql`
-        {
-          basket(checkoutID: "${environment.basketKey}"){
-            items {
-              quantity
-              product {id title price}
-            }
-          }
-        }
-        `,
-      })
-      .valueChanges.subscribe((result) => {
-        this.basket = CreateBasket(result.data.basket);
-      });
+    const defaultBasket: any = { data: { basket: { items: [] } } };
+    this.basket$ = this.getBasketQuery.watch().valueChanges.pipe(
+      startWith(defaultBasket),
+      map((result) => CreateBasket(result.data.basket)),
+    );
   }
 
   onOpen(): void {
     this.modalClicked = !this.modalClicked;
   }
 
-  onClear(): void {}
+  onClear(): void {
+    this.basket$ = this.clearBasketMutation
+      .mutate({
+        key: environment.basketKey,
+      })
+      .pipe(map((result) => ClearBasket()));
+  }
+
+  onProductAdded(basket: IBasket): void {
+    this.basket = CreateBasket(basket);
+  }
 }

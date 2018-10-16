@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../shared/models/product.model';
 import { SortEvent } from '../../shared/components/sortableColumn/sort.service';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
-import { Query } from 'src/graphql-types';
-import { CreateProducts } from 'src/app/shared/selectors/product.selector';
+import { CreateProducts, IProduct } from 'src/app/shared/selectors/product.selector';
+import { AllProductsQuery } from 'src/app/shared/graphql/queries/all-products.graphql';
+import { Observable } from 'rxjs';
+import { map, filter } from 'rxjs/operators';
+import { DeleteProductMutation } from 'src/app/shared/graphql/mutations/delete-product.graphql';
 
 @Component({
   selector: 'app-product-table',
@@ -12,46 +13,24 @@ import { CreateProducts } from 'src/app/shared/selectors/product.selector';
   styleUrls: ['./product-table.component.scss'],
 })
 export class ProductTableComponent implements OnInit {
-  products: any;
+  products: Observable<IProduct[]>;
 
-  constructor(private apollo: Apollo) {}
+  constructor(private allProductsQuery: AllProductsQuery, private deleteProductMutation: DeleteProductMutation) {}
 
   ngOnInit(): void {
-    this.apollo
-      .watchQuery<Query>({
-        query: gql`
-          {
-            allProducts {
-              edges {
-                node {
-                  id
-                  sku
-                  title
-                  price
-                  basePrice
-                  stocked
-                }
-              }
-            }
-          }
-        `,
-      })
-      .valueChanges.subscribe((result) => {
-        this.products = CreateProducts(result.data.allProducts);
-      });
+    this.products = this.allProductsQuery
+      .watch()
+      .valueChanges.pipe(map((result) => CreateProducts(result.data.allProducts)));
   }
 
   deleteProduct(product: Product): void {
-    this.apollo
+    this.deleteProductMutation
       .mutate({
-        mutation: gql`mutation {
-        deleteProduct(id: ${product.id}) {
-          product {
-            id
-          }
-        }`,
+        key: product.id,
       })
-      .subscribe((result) => this.products.filter((item) => item.id !== product.id));
+      .subscribe((result) => {
+        this.products = this.products.pipe(map((products) => products.filter((item) => item.id !== product.id)));
+      });
   }
 
   onSorted(event: SortEvent): void {}

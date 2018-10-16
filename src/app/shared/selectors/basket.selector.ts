@@ -13,6 +13,15 @@ export interface IBasketItem {
   totalPrice: number;
 }
 
+export function ClearBasket() {
+  const newBasket: IBasket = {
+    totalPrice: 0,
+    items: <any>[],
+  };
+
+  return newBasket;
+}
+
 export function CreateBasket(data: Basket) {
   console.log(data);
   const newBasket: IBasket = {
