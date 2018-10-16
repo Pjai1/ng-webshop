@@ -3,7 +3,7 @@ import * as fromRoot from '../index';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { getProductsEntitiesState } from '../product';
 
-export const getBasketState = createFeatureSelector<fromRoot.State, fromBasket.State>('basket');
+export const getBasketState = createFeatureSelector<fromRoot.State, fromBasket.IState>('basket');
 
 export const getBasketClickedState = createSelector(getBasketState, (state) => state.basketOpen);
 
@@ -13,14 +13,10 @@ export const getBasketWithProductsState = createSelector(
   getProductsEntitiesState,
   getBasketEntitiesState,
   (products, basket) => {
-    console.log(products, basket);
     if (products && basket && basket.length > 0) {
-      console.log('do I have this');
       console.log(products, basket);
       const basketItems = basket.map((item) => {
-        console.log('item', item);
         const basketItem = products.find((product) => product.id === item.id);
-        console.log('basketitem', basketItem);
         if (basketItem) {
           return {
             title: basketItem.title,
@@ -35,11 +31,9 @@ export const getBasketWithProductsState = createSelector(
       return { basketItems, totalPrice };
     }
 
-    // FIXME: return empty basket (null pattern)
-    // so also basket?.basketItems in view
-    // return {
-    //   basketItems: [],
-    //   totalPrice: 0
-    // }
+    return {
+      basketItems: [],
+      totalPrice: 0,
+    };
   },
 );

@@ -1,17 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Basket } from '../../shared/models/basket.model';
-import { ServiceBus } from '../../serviceBus';
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as fromBasket from '../../store/basket/basket.reducers';
 import * as fromBasketRoot from '../../store/basket/index';
-import {
-  DeleteBasketAction,
-  // DeleteProductFromBasketAction,
-  BasketClickedAction,
-} from 'src/app/store/basket/basket.actions';
-
-// FIXME: avoid basket?.basketItems, better to apply null pattern
+import { DeleteBasketAction, BasketClickedAction } from 'src/app/store/basket/basket.actions';
+import { IBasketDto } from 'src/app/shared/services/basket.service';
 
 @Component({
   selector: 'app-basket',
@@ -19,16 +12,13 @@ import {
   styleUrls: ['./basket.component.scss'],
 })
 export class BasketComponent implements OnInit, OnDestroy {
-  basket: Basket;
+  basket: IBasketDto;
   modalClicked$: Observable<boolean>;
   modalClicked: boolean;
   subscription?: Subscription;
-  basket$: Observable<Basket>;
+  basket$: Observable<IBasketDto>;
 
-  constructor(
-    // private serviceBus: ServiceBus,
-    private store: Store<fromBasket.State>,
-  ) {
+  constructor(private store: Store<fromBasket.IState>) {
     this.basket$ = store.pipe(select(fromBasketRoot.getBasketWithProductsState));
     this.modalClicked$ = store.pipe(select(fromBasketRoot.getBasketClickedState));
   }
@@ -37,7 +27,6 @@ export class BasketComponent implements OnInit, OnDestroy {
     this.subscription = this.modalClicked$.subscribe((click) => (this.modalClicked = click));
 
     this.subscription = this.basket$.subscribe((basket) => {
-      console.log('got basket', basket);
       this.basket = basket;
     });
   }

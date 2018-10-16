@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Basket } from '../models/basket.model';
-import { environment } from '../../../environments/environment';
 import { map } from 'rxjs/operators';
-import { Product } from '../models/product.model';
+
+import { environment } from '../../../environments/environment';
+import { IProductDto } from './product.service';
+
+export interface IBasketDto {
+  items?: BasketItemDto[];
+}
 
 export class BasketItemDto {
-  id: number;
-  quantity: number;
+  id?: number;
+  quantity?: number;
 }
 
 export interface BasketDto extends Array<BasketItemDto> {}
@@ -21,39 +25,19 @@ const basketUrl = `${environment.apiBaseUrl}/basket/${environment.basketKey}`;
 export class BasketService {
   constructor(private http: HttpClient) {}
 
-  getBasket(): Observable<Basket> {
-    return this.http.get<BasketDto>(basketUrl).pipe(
-      map((data) => {
-        // FIXME: don't use models anymore
-        return new Basket(data);
-      }),
-    );
+  getBasket(): Observable<IBasketDto> {
+    return this.http.get<IBasketDto>(basketUrl);
   }
 
-  addToBasket(productId: number, quantity: number): Observable<Basket> {
-    return this.http.post<BasketDto>(`${basketUrl}/product/${productId}`, { quantity: quantity }).pipe(
-      map((data) => {
-        // FIXME: don't use models anymore
-        return new Basket(data);
-      }),
-    );
+  addToBasket(productId: number, quantity: number): Observable<IBasketDto> {
+    return this.http.post<IBasketDto>(`${basketUrl}/product/${productId}`, { quantity: quantity });
   }
 
-  deleteBasket(): Observable<Basket> {
-    return this.http.delete<BasketDto>(basketUrl).pipe(
-      map((data) => {
-        // FIXME: don't use models anymore
-        return new Basket(data);
-      }),
-    );
+  deleteBasket(): Observable<IBasketDto> {
+    return this.http.delete<IBasketDto>(basketUrl);
   }
 
-  deleteProductFromBasket(product: Product): Observable<Basket> {
-    return this.http.delete<BasketDto>(`${basketUrl}/product/${product.id}`).pipe(
-      map((data) => {
-        // FIXME: don't use models anymore
-        return new Basket(data);
-      }),
-    );
+  deleteProductFromBasket(product: IProductDto): Observable<IBasketDto> {
+    return this.http.delete<IBasketDto>(`${basketUrl}/product/${product.id}`);
   }
 }

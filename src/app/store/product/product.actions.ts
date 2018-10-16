@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import { Product } from 'src/app/shared/models/product.model';
+import { IProductDto } from 'src/app/shared/services/product.service';
+import { IProductItemDto } from './product.reducers';
 
 export const GET_PRODUCTS = 'Get Products';
 export const GET_PRODUCTS_SUCCESS = 'Get Products Success';
@@ -21,7 +22,7 @@ export class GetProductsAction implements Action {
 export class GetProductsSuccessAction implements Action {
   readonly type = GET_PRODUCTS_SUCCESS;
 
-  constructor(public payload: Product[]) {}
+  constructor(public payload: IProductItemDto[]) {}
 }
 
 export class GetProductAction implements Action {
@@ -33,44 +34,38 @@ export class GetProductAction implements Action {
 export class GetProductSuccessAction implements Action {
   readonly type = GET_PRODUCT_SUCCESS;
 
-  constructor(public payload: Product) {}
+  constructor(public payload: IProductItemDto) {}
 }
 
 export class SaveProductAction implements Action {
   readonly type = SAVE_PRODUCT;
 
-  constructor(public payload: Product) {}
+  constructor(public payload: IProductItemDto) {}
 }
 
 export class SaveProductSuccessAction implements Action {
   readonly type = SAVE_PRODUCT_SUCCESS;
 
-  constructor(public payload: Product) {}
+  constructor(public payload: IProductItemDto) {}
 }
 
 export class SaveProductToItemsAction implements Action {
   readonly type = SAVE_PRODUCT_TO_ITEMS;
 
-  constructor(public payload: Product) {}
+  constructor(public payload: IProductItemDto) {}
 }
 
 export class DeleteProductAction implements Action {
   readonly type = DELETE_PRODUCT;
 
-  constructor(public payload: Product) {}
+  constructor(public payload: IProductItemDto) {}
 }
 
 export class DeleteProductSuccessAction implements Action {
   readonly type = DELETE_PRODUCT_SUCCESS;
 
-  constructor(public payload: Product) {}
+  constructor(public payload: IProductItemDto) {}
 }
-
-// export class DeleteProductFromItemsAction implements Action {
-//   readonly type = DELETE_PRODUCT_FROM_ITEMS;
-
-//   constructor(public payload: Product) {}
-// }
 
 export type ProductActions =
   | GetProductsAction
@@ -81,5 +76,4 @@ export type ProductActions =
   | SaveProductSuccessAction
   | DeleteProductAction
   | DeleteProductSuccessAction
-  //  DeleteProductFromItemsAction
   | SaveProductToItemsAction;

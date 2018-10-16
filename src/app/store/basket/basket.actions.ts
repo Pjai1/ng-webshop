@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
-import { Basket } from 'src/app/shared/models/basket.model';
-import { BasketItem } from './basket.reducers';
-import { Product } from 'src/app/shared/models/product.model';
+import { IProductDto } from 'src/app/shared/services/product.service';
+import { IBasketItemDto } from './basket.reducers';
+import { IBasketDto } from 'src/app/shared/services/basket.service';
 
 export const enum BasketTypes {
   GET_BASKET = 'Get Basket',
@@ -26,19 +26,19 @@ export class GetBasketAction implements Action {
 export class GetBasketSuccessAction implements Action {
   readonly type = BasketTypes.GET_BASKET_SUCCESS;
 
-  constructor(public payload: BasketItem[]) {}
+  constructor(public payload: IBasketItemDto[]) {}
 }
 
 export class SaveProductToBasketAction implements Action {
   readonly type = BasketTypes.SAVE_PRODUCT_TO_BASKET;
 
-  constructor(public payload: BasketItem) {}
+  constructor(public payload: IBasketItemDto) {}
 }
 
 export class SaveProductToBasketSuccessAction implements Action {
   readonly type = BasketTypes.SAVE_PRODUCT_TO_BASKET_SUCCESS;
 
-  constructor(public payload: Basket) {}
+  constructor(public payload: IBasketDto) {}
 }
 
 export class DeleteBasketAction implements Action {
@@ -48,19 +48,19 @@ export class DeleteBasketAction implements Action {
 export class DeleteBasketSuccessAction implements Action {
   readonly type = BasketTypes.DELETE_BASKET_SUCCESS;
 
-  constructor(public payload: Basket) {}
+  constructor(public payload: IBasketDto) {}
 }
 
 export class DeleteProductFromBasketAction implements Action {
   readonly type = BasketTypes.DELETE_PRODUCT_FROM_BASKET;
 
-  constructor(public payload: Product) {}
+  constructor(public payload: IProductDto) {}
 }
 
 export class DeleteProductFromBasketSuccessAction implements Action {
   readonly type = BasketTypes.DELETE_PRODUCT_FROM_BASKET_SUCCESS;
 
-  constructor(public payload: BasketItem[]) {}
+  constructor(public payload: IBasketItemDto[]) {}
 }
 
 export type BasketActions =
@@ -71,4 +71,5 @@ export type BasketActions =
   | DeleteBasketSuccessAction
   | DeleteProductFromBasketAction
   | DeleteProductFromBasketSuccessAction
-  | BasketClickedAction;
+  | BasketClickedAction
+  | SaveProductToBasketSuccessAction;

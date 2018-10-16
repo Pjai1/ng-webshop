@@ -2,9 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import * as fromProduct from '../../store/product/product.reducers';
 import * as fromProductRoot from '../../store/product/index';
-import { GetProductsAction } from 'src/app/store/product/product.actions';
 import { Observable, Subscription } from 'rxjs';
-import { Product } from 'src/app/shared/models/product.model';
 
 @Component({
   selector: 'app-product-grid',
@@ -12,18 +10,19 @@ import { Product } from 'src/app/shared/models/product.model';
   styleUrls: ['./product-grid.component.scss'],
 })
 export class ProductGridComponent implements OnInit, OnDestroy {
-  products: Product[];
-  products$: Observable<Product[]>;
+  products: fromProduct.IProductItemDto[];
+  products$: Observable<fromProduct.IProductItemDto[]>;
   subscription?: Subscription;
 
-  constructor(private store: Store<fromProduct.State>) {
+  constructor(private store: Store<fromProduct.IState>) {
     this.products$ = store.pipe(select(fromProductRoot.getProductsEntitiesState));
   }
 
   ngOnInit(): void {
     this.subscription = this.products$
-      .pipe<Product[]>(select(fromProductRoot.getProductsEntitiesState))
+      .pipe<fromProduct.IProductItemDto[]>(select(fromProductRoot.getProductsEntitiesState))
       .subscribe((products) => {
+        console.log(products);
         this.products = products;
       });
   }

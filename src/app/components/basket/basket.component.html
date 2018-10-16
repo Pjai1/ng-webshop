@@ -17,7 +17,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div *ngIf="!basket || basket?.basketItems?.length === 0"
+      <div *ngIf="!basket || basket?.basketItems.length === 0"
            class="modal-body">
         <p>Basket is empty</p>
       </div>
@@ -28,14 +28,14 @@
         <p><b>Price:</b> {{item.price | currencyFormat}}</p>
         <p><b>Quantity:</b> {{item.quantity}}</p>
       </div>
-      <div *ngIf="basket?.basketItems?.length > 0"
+      <div *ngIf="basket?.basketItems.length > 0"
            class="modal-footer">
         <b>Total Price:</b> {{basket.totalPrice | currencyFormat}}
       </div>
       <button type="button"
               (click)="onClear()"
               class="btn btn-danger"
-              *ngIf="basket?.basketItems?.length > 0">
+              *ngIf="basket?.basketItems.length > 0">
         <i class="fas fa-times-circle"></i>Clear
       </button>
     </div>

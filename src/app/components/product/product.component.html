@@ -8,7 +8,7 @@
     <p class="card-text"><b>Product Sku:</b> {{product.sku}}</p>
     <p class="card-text"><b>Product Desc:</b> {{product.desc}}</p>
     <p class="card-text"><b>Product Stocked:</b> {{product.stocked | stocked}}</p>
-    <p class="card-text"><b>Discount:</b> {{product.getDiscount() | percentage}}</p>
+    <p class="card-text"><b>Discount:</b> {{product.discount | percentage}}</p>
     <p class="card-text"><b>Product Price:</b> {{product.price | currencyFormat}}</p>
     <p *ngIf="product.stocked"><button (click)="onAddProduct()"
               type="button"

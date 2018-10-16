@@ -1,7 +1,6 @@
 import { ProductService } from './product.service';
 import { of } from 'rxjs';
 import { async } from '@angular/core/testing';
-import { Product } from '../models/product.model';
 
 describe('Product Service', () => {
   let service: ProductService;
@@ -57,7 +56,6 @@ describe('Product Service', () => {
 
     service.getProduct(expectedProduct.id).subscribe((product) => {
       expect(product).toEqual(expectedProduct);
-      expect(product).toBeInstanceOf(Product);
     });
     expect(httpClientSpy.get.mock.calls.length).toBe(1);
   }));
@@ -67,7 +65,6 @@ describe('Product Service', () => {
 
     service.createProduct(expectedProduct).subscribe((createdProduct) => {
       expect(createdProduct).toEqual(expectedProduct);
-      expect(createdProduct).toBeInstanceOf(Product);
     });
     expect(httpClientSpy.post.mock.calls.length).toBe(1);
   }));
@@ -77,7 +74,6 @@ describe('Product Service', () => {
 
     service.updateProduct(expectedProduct).subscribe((updatedProduct) => {
       expect(updatedProduct).toEqual(expectedProduct);
-      expect(updatedProduct).toBeInstanceOf(Product);
     });
     expect(httpClientSpy.put.mock.calls.length).toBe(1);
   }));
@@ -87,19 +83,8 @@ describe('Product Service', () => {
 
     service.deleteProduct(expectedProduct).subscribe((deletedProduct) => {
       expect(deletedProduct).toEqual(expectedProduct);
-      expect(deletedProduct).toBeInstanceOf(Product);
     });
     expect(httpClientSpy.delete.mock.calls.length).toBe(1);
-  }));
-
-  it('should create a product when no id is given', async(() => {
-    httpClientSpy.post.mockReturnValue(of(expectedProduct));
-
-    service.saveProduct(expectedProduct).subscribe((createdProduct) => {
-      expect(createdProduct).toEqual(expectedProduct);
-      expect(createdProduct).toBeInstanceOf(Product);
-    });
-    expect(httpClientSpy.post.mock.calls.length).toBe(1);
   }));
 
   it('should save a product when an id is given', async(() => {
@@ -107,7 +92,6 @@ describe('Product Service', () => {
 
     service.saveProduct(expectedProduct).subscribe((savedProduct) => {
       expect(savedProduct).toEqual(expectedProduct);
-      expect(savedProduct).toBeInstanceOf(Product);
     });
     expect(httpClientSpy.put.mock.calls.length).toBe(1);
   }));

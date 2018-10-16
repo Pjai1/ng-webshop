@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BasketService } from 'src/app/shared/services/basket.service';
+import { BasketService, IBasketDto } from 'src/app/shared/services/basket.service';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
@@ -11,9 +11,7 @@ import {
   DeleteProductFromBasketAction,
 } from './basket.actions';
 
-import { DELETE_PRODUCT_SUCCESS } from '../product/product.actions';
-import { map, mergeMap, tap } from 'rxjs/operators';
-import { Basket } from 'src/app/shared/models/basket.model';
+import { map, mergeMap } from 'rxjs/operators';
 
 @Injectable()
 export class BasketEffects {
@@ -23,7 +21,7 @@ export class BasketEffects {
     mergeMap((action: GetBasketAction) => {
       return this.basketService
         .getBasket()
-        .pipe(map((basket: Basket) => ({ type: BasketTypes.GET_BASKET_SUCCESS, payload: basket.items })));
+        .pipe(map((basket: IBasketDto) => ({ type: BasketTypes.GET_BASKET_SUCCESS, payload: basket })));
     }),
   );
 
@@ -33,7 +31,7 @@ export class BasketEffects {
     mergeMap((action: SaveProductToBasketAction) => {
       return this.basketService
         .addToBasket(action.payload.id, action.payload.quantity)
-        .pipe(map((basket: Basket) => ({ type: BasketTypes.SAVE_PRODUCT_TO_BASKET_SUCCESS, payload: basket.items })));
+        .pipe(map((basket: IBasketDto) => ({ type: BasketTypes.SAVE_PRODUCT_TO_BASKET_SUCCESS, payload: basket })));
     }),
   );
 
@@ -43,7 +41,7 @@ export class BasketEffects {
     mergeMap((action: DeleteBasketAction) => {
       return this.basketService
         .deleteBasket()
-        .pipe(map((basket: Basket) => ({ type: BasketTypes.DELETE_BASKET_SUCCESS, payload: basket.items })));
+        .pipe(map((basket: IBasketDto) => ({ type: BasketTypes.DELETE_BASKET_SUCCESS, payload: basket })));
     }),
   );
 
@@ -51,11 +49,12 @@ export class BasketEffects {
   deleteProductFromBasket$: Observable<Action> = this.actions$.pipe(
     ofType(BasketTypes.DELETE_PRODUCT_FROM_BASKET),
     mergeMap((action: DeleteProductFromBasketAction) => {
-      return this.basketService
-        .deleteProductFromBasket(action.payload)
-        .pipe(
-          map((basket: Basket) => ({ type: BasketTypes.DELETE_PRODUCT_FROM_BASKET_SUCCESS, payload: basket.items })),
-        );
+      return this.basketService.deleteProductFromBasket(action.payload).pipe(
+        map((basket: IBasketDto) => ({
+          type: BasketTypes.DELETE_PRODUCT_FROM_BASKET_SUCCESS,
+          payload: basket,
+        })),
+      );
     }),
   );
   constructor(private basketService: BasketService, private actions$: Actions) {}

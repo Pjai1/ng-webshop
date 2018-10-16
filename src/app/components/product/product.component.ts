@@ -1,6 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Product } from '../../shared/models/product.model';
-import { ServiceBus } from '../../serviceBus';
 import { Store, select } from '@ngrx/store';
 import * as fromProduct from '../../store/product/product.reducers';
 import { SaveProductToBasketAction, BasketClickedAction } from 'src/app/store/basket/basket.actions';
@@ -14,12 +12,12 @@ import * as fromBasketRoot from '../../store/basket/index';
 })
 export class ProductComponent implements OnInit {
   @Input()
-  product: Product;
+  product: fromProduct.IProductItemDto;
   quantity = 1;
   modalClicked$: Observable<boolean>;
   modalClicked: boolean;
 
-  constructor(private store: Store<fromProduct.State>) {
+  constructor(private store: Store<fromProduct.IState>) {
     this.modalClicked$ = store.pipe(select(fromBasketRoot.getBasketClickedState));
   }
 

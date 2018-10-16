@@ -21,10 +21,10 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
 }
 
 export interface State {
-  basket: fromBasket.State;
-  products: fromProduct.State;
-  messages: fromMessage.State;
-  router: RouterReducerState;
+  basket?: fromBasket.IState;
+  products?: fromProduct.IState;
+  messages?: fromMessage.State;
+  router?: RouterReducerState;
 }
 
 export const reducers: ActionReducerMap<State> = {

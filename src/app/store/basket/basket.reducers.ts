@@ -1,23 +1,23 @@
 import { BasketActions, BasketTypes } from './basket.actions';
 
-export interface BasketItem {
+export interface IBasketItemDto {
   id: number;
   quantity: number;
 }
 
-export interface State {
-  items: BasketItem[];
+export interface IState {
+  items: IBasketItemDto[];
   basketOpen: boolean;
 }
 
-const initialState: State = {
+export const initialState: IState = {
   items: null,
   basketOpen: false,
 };
 
 // TODO: Add some unit tests to test reducer
 
-export function basketReducer(state: State = initialState, action: BasketActions): State {
+export function basketReducer(state: IState = initialState, action: BasketActions): IState {
   switch (action.type) {
     case BasketTypes.BASKET_CLICKED:
       return {

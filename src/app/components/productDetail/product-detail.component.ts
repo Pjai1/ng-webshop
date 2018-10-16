@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Product } from '../../shared/models/product.model';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
@@ -16,12 +15,12 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
-  product: Product;
+  product: fromProduct.IProductItemDto;
   productForm: FormGroup;
   productId: number;
   subscription?: Subscription;
 
-  constructor(private location: Location, private toastr: ToastrService, private store: Store<fromProduct.State>) {
+  constructor(private location: Location, private toastr: ToastrService, private store: Store<fromProduct.IState>) {
     this.productForm = new FormGroup({
       sku: new FormControl(''),
       title: new FormControl('', [Validators.required]),
@@ -42,7 +41,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       .subscribe((router) => (this.productId = router.state.root.firstChild.params.id));
 
     this.subscription = this.store
-      .pipe<Product>(select(fromProductRoot.getProductEntitiesState))
+      .pipe<fromProduct.IProductItemDto>(select(fromProductRoot.getProductEntitiesState))
       .subscribe((product) => {
         this.product = product;
         if (product) {
@@ -69,7 +68,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     if (!this.productForm.value.basePrice) {
       this.productForm.value.basePrice = this.productForm.value.price;
     }
-    const oldProduct = Object.assign(new Product(), this.product, this.productForm.value);
+    const oldProduct = Object.assign({}, this.product, this.productForm.value);
     this.store.dispatch(new SaveProductAction(oldProduct));
   }
 

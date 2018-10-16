@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { mergeMap, map, switchMap, tap } from 'rxjs/operators';
 import { ProductService } from 'src/app/shared/services/product.service';
-import { Product } from 'src/app/shared/models/product.model';
 import * as fromBasket from '../../store/basket/basket.reducers';
 import {
   GET_PRODUCTS,
@@ -20,8 +19,8 @@ import {
   SaveProductSuccessAction,
   SaveProductToItemsAction,
 } from './product.actions';
-import { ServiceBus } from 'src/app/serviceBus';
 import { DeleteProductFromBasketAction } from '../basket/basket.actions';
+import { IProductItemDto } from './product.reducers';
 
 @Injectable()
 export class ProductEffects {
@@ -31,7 +30,7 @@ export class ProductEffects {
     mergeMap((action: GetProductsAction) => {
       return this.productService
         .getProducts(action.payload)
-        .pipe(map((products: Product[]) => ({ type: GET_PRODUCTS_SUCCESS, payload: products })));
+        .pipe(map((products: IProductItemDto[]) => ({ type: GET_PRODUCTS_SUCCESS, payload: products })));
     }),
   );
 
@@ -42,7 +41,7 @@ export class ProductEffects {
       console.log(action);
       return this.productService
         .getProduct(action.payload)
-        .pipe(map((product: Product) => ({ type: GET_PRODUCT_SUCCESS, payload: product })));
+        .pipe(map((product: IProductItemDto) => ({ type: GET_PRODUCT_SUCCESS, payload: product })));
     }),
   );
 
@@ -63,7 +62,7 @@ export class ProductEffects {
     mergeMap((action: SaveProductAction) => {
       console.log(action);
       return this.productService.deleteProduct(action.payload).pipe(
-        tap((product) => this.store.dispatch(new DeleteProductFromBasketAction(<any>product))),
+        tap((product) => this.store.dispatch(new DeleteProductFromBasketAction(product))),
         switchMap((product) => [new DeleteProductSuccessAction(product)]),
       );
     }),
@@ -72,6 +71,6 @@ export class ProductEffects {
   constructor(
     private productService: ProductService,
     private actions$: Actions,
-    private store: Store<fromBasket.State>,
+    private store: Store<fromBasket.IState>,
   ) {}
 }

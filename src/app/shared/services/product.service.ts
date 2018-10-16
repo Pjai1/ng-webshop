@@ -3,24 +3,23 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs';
 import { map, retry } from 'rxjs/operators';
-import { Product } from '../../shared/models/product.model';
 
 export interface IProductsDto {
-  total: number;
-  page: number;
-  pageSize: number;
+  total?: number;
+  page?: number;
+  pageSize?: number;
   selectedProducts: IProductDto[];
 }
 
 export interface IProductDto {
-  id: number;
-  sku: string;
-  title: string;
-  price: number;
-  basePrice: number;
-  stocked: boolean;
-  image: string;
-  desc: string;
+  id?: number;
+  sku?: string;
+  title?: string;
+  price?: number;
+  basePrice?: number;
+  stocked?: boolean;
+  image?: string;
+  desc?: string;
 }
 
 const productUrl = `${environment.apiBaseUrl}/products`;
@@ -31,8 +30,7 @@ const productUrl = `${environment.apiBaseUrl}/products`;
 export class ProductService {
   constructor(private http: HttpClient) {}
 
-  // FIXME: return type Observable<IProductDto[]>
-  getProducts(sortProperty?: string): Observable<Product[]> {
+  getProducts(sortProperty?: string): Observable<IProductDto[]> {
     sortProperty ? (sortProperty = sortProperty.trim()) : (sortProperty = null);
     const options = sortProperty
       ? {
@@ -40,57 +38,29 @@ export class ProductService {
         }
       : {};
 
-    return this.http.get<IProductsDto>(productUrl, options).pipe(
-      map((data) => {
-        return data.selectedProducts.map((dto) => {
-          // FIXME: don't use models anymore
-          return new Product(<any>dto);
-        });
-      }),
-    );
+    return this.http.get<IProductsDto>(productUrl, options).pipe(map((products) => products.selectedProducts));
   }
 
-  getProduct(id: number): Observable<Product> {
-    return this.http.get<Product>(`${productUrl}/${id}`).pipe(
-      map((data) => {
-        // FIXME: don't use models anymore
-        return new Product(data);
-      }),
-    );
+  getProduct(id: number): Observable<IProductDto> {
+    return this.http.get<IProductDto>(`${productUrl}/${id}`);
   }
 
-  saveProduct(product: Product): Observable<Product> {
-    if (product.isNew()) {
-      console.log('creating product');
+  saveProduct(product: IProductDto): Observable<IProductDto> {
+    if (!product.id) {
       return this.createProduct(product);
     }
     return this.updateProduct(product);
   }
 
-  updateProduct(product: Product): Observable<Product> {
-    return this.http.put<IProductDto>(`${productUrl}/${product.id}`, product).pipe(
-      map((data) => {
-        // FIXME: don't use models anymore
-        return new Product(data);
-      }),
-    );
+  updateProduct(product: IProductDto): Observable<IProductDto> {
+    return this.http.put<IProductDto>(`${productUrl}/${product.id}`, product);
   }
 
-  createProduct(product: Product): Observable<Product> {
-    return this.http.post<IProductDto>(productUrl, product).pipe(
-      map((data) => {
-        // FIXME: don't use models anymore
-        return new Product(data);
-      }),
-    );
+  createProduct(product: IProductDto): Observable<IProductDto> {
+    return this.http.post<IProductDto>(productUrl, product);
   }
 
-  deleteProduct(product: Product): Observable<Product> {
-    return this.http.delete<Product>(`${productUrl}/${product.id}`).pipe(
-      map((data) => {
-        // FIXME: don't use models anymore
-        return new Product(data);
-      }),
-    );
+  deleteProduct(product: IProductDto): Observable<IProductDto> {
+    return this.http.delete<IProductDto>(`${productUrl}/${product.id}`);
   }
 }
