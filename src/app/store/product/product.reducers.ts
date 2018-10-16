@@ -32,8 +32,6 @@ export const initialState: IState = {
   currentProduct: null,
 };
 
-// TODO: Add some unit tests to test reducer
-
 export function productsReducer(state: IState = initialState, action: ProductActions): IState {
   switch (action.type) {
     case GET_PRODUCTS:

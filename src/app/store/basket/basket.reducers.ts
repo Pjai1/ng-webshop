@@ -15,8 +15,6 @@ export const initialState: IState = {
   basketOpen: false,
 };
 
-// TODO: Add some unit tests to test reducer
-
 export function basketReducer(state: IState = initialState, action: BasketActions): IState {
   switch (action.type) {
     case BasketTypes.BASKET_CLICKED:
