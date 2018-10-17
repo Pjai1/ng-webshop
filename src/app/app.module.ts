@@ -8,6 +8,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLinkModule, HttpLink } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { withClientState } from 'apollo-link-state';
 
 import { AppComponent } from './app.component';
 import { ProductTableComponent } from './components/productsTable/product-table.component';
@@ -26,6 +27,7 @@ import { BasketComponent } from './components/basket/basket.component';
 import { SortableColumnComponent } from './shared/components/sortableColumn/sortable-column.component';
 import { environment } from 'src/environments/environment';
 import { FormStateDataDirective } from './shared/directives/formStateData.directive';
+import { defaults, resolvers } from './shared/graphql/resolvers.graphql';
 
 @NgModule({
   declarations: [
@@ -62,13 +64,15 @@ import { FormStateDataDirective } from './shared/directives/formStateData.direct
     [
       {
         provide: APOLLO_OPTIONS,
-        useFactory(httplink: HttpLink) {
-          return {
-            cache: new InMemoryCache(),
-            link: httplink.create({
-              uri: environment.graphQlUrl,
-            }),
-          };
+        useFactory(httpLink: HttpLink) {
+          const cache = new InMemoryCache();
+          const http = httpLink.create({ uri: environment.graphQlUrl });
+          const local = withClientState({
+            cache,
+            defaults,
+            resolvers,
+          });
+          return { cache, link: local.concat(http) };
         },
         deps: [HttpLink],
       },

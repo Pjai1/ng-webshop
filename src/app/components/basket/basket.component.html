@@ -24,8 +24,8 @@
 
       <div class="modal-body"
            *ngFor="let item of (basket$ | async)?.items">
-        <p><b>Name:</b> {{item.title}}</p>
-        <p><b>Price:</b> {{item.price | currencyFormat}}</p>
+        <p><b>Name:</b> {{item.product.title}}</p>
+        <p><b>Price:</b> {{item.product.price | currencyFormat}}</p>
         <p><b>Quantity:</b> {{item.quantity}}</p>
       </div>
       <div *ngIf="(basket$ | async)?.items?.length > 0"

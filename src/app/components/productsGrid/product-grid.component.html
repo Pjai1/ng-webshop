@@ -1,5 +1,5 @@
 <div class="row-grid">
-  <div *ngFor="let product of products | async">
-    <app-product [product]="product"></app-product>
+  <div *ngFor="let product of (products$ | async).edges">
+    <app-product [product]="product.node"></app-product>
   </div>
 </div>

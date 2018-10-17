@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { environment } from 'src/environments/environment';
-import { CreateBasket, IBasket, ClearBasket } from 'src/app/shared/selectors/basket.selector';
-import { Query } from 'src/graphql-types';
+import { CreateBasket, ClearBasket } from 'src/app/shared/selectors/basket.selector';
 import { ClearBasketMutation } from 'src/app/shared/graphql/mutations/clear-basket.graphql';
 import { GetBasketQuery } from 'src/app/shared/graphql/queries/basket.graphql';
 import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
+import { IBasket } from 'src/app/shared/graphql/resolvers.graphql';
 
 @Component({
   selector: 'app-basket',
@@ -19,18 +17,10 @@ export class BasketComponent implements OnInit {
   basket: IBasket;
   modalClicked = false;
 
-  constructor(
-    private getBasketQuery: GetBasketQuery,
-    private clearBasketMutation: ClearBasketMutation,
-    private apollo: Apollo,
-  ) {}
+  constructor(private getBasketQuery: GetBasketQuery, private clearBasketMutation: ClearBasketMutation) {}
 
   ngOnInit(): void {
-    const defaultBasket: any = { data: { basket: { items: [] } } };
-    this.basket$ = this.getBasketQuery.watch().valueChanges.pipe(
-      startWith(defaultBasket),
-      map((result) => CreateBasket(result.data.basket)),
-    );
+    this.basket$ = this.getBasketQuery.execute();
   }
 
   onOpen(): void {
@@ -38,11 +28,7 @@ export class BasketComponent implements OnInit {
   }
 
   onClear(): void {
-    this.basket$ = this.clearBasketMutation
-      .mutate({
-        key: environment.basketKey,
-      })
-      .pipe(map((result) => ClearBasket()));
+    this.clearBasketMutation.mutate().subscribe();
   }
 
   onProductAdded(basket: IBasket): void {

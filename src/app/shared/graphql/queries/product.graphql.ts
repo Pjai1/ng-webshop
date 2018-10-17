@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import { environment } from 'src/environments/environment';
 import { Basket, Product } from 'src/graphql-types';
 import { ApolloQueryResult } from 'apollo-client';
+import { productFragment } from '../fragments/product-fragment.graphql';
 
 interface IProductQuery {
   product: Product;
@@ -16,15 +17,9 @@ export class GetProductQuery extends Query<IProductQuery> {
   document = gql`
     query product($id: Int) {
       product(id: $id) {
-        id
-        sku
-        stocked
-        desc
-        image
-        title
-        price
-        basePrice
+        ...productFields
       }
     }
+    ${productFragment}
   `;
 }

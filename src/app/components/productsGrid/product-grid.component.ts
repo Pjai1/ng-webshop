@@ -11,13 +11,11 @@ import { Query, ProductConnection } from 'src/graphql-types';
   styleUrls: ['./product-grid.component.scss'],
 })
 export class ProductGridComponent implements OnInit {
-  products: Observable<IProduct[]>;
+  products$: Observable<ProductConnection>;
 
   constructor(private allProductsQuery: AllProductsQuery) {}
 
   ngOnInit(): void {
-    this.products = this.allProductsQuery
-      .watch()
-      .valueChanges.pipe(map((result) => CreateProducts(result.data.allProducts)));
+    this.products$ = this.allProductsQuery.execute();
   }
 }

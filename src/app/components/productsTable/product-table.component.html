@@ -37,14 +37,14 @@
       </th>
     </thead>
     <tbody>
-      <tr *ngFor="let product of products | async">
-        <td><a routerLink="/product/{{product.id}}">{{product.id}}</a></td>
-        <td>{{product.sku}}</td>
-        <td>{{product.title}}</td>
-        <td>{{product.price | currencyFormat}}</td>
-        <td>{{product.basePrice | currencyFormat}}</td>
-        <td>{{product.stocked | stocked}}</td>
-        <td><button (click)="deleteProduct(product)"
+      <tr *ngFor="let product of (products$ | async).edges">
+        <td><a routerLink="/product/{{product.node.id}}">{{product.node.id}}</a></td>
+        <td>{{product.node.sku}}</td>
+        <td>{{product.node.title}}</td>
+        <td>{{product.node.price | currencyFormat}}</td>
+        <td>{{product.node.basePrice | currencyFormat}}</td>
+        <td>{{product.node.stocked | stocked}}</td>
+        <td><button (click)="deleteProduct(product.node)"
                   type="button"
                   class="btn btn-danger"><i class="fas fa-times"></i>Delete</button></td>
       </tr>
