@@ -6,6 +6,8 @@ import { AllProductsQuery } from 'src/app/shared/graphql/queries/all-products.gr
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { DeleteProductMutation } from 'src/app/shared/graphql/mutations/delete-product.graphql';
+import { RemoveItemFromBasketMutation } from 'src/app/shared/graphql/mutations/remove-item-from-basket';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-product-table',
@@ -15,7 +17,11 @@ import { DeleteProductMutation } from 'src/app/shared/graphql/mutations/delete-p
 export class ProductTableComponent implements OnInit {
   products: Observable<IProduct[]>;
 
-  constructor(private allProductsQuery: AllProductsQuery, private deleteProductMutation: DeleteProductMutation) {}
+  constructor(
+    private allProductsQuery: AllProductsQuery,
+    private deleteProductMutation: DeleteProductMutation,
+    private removeItemFromBasketMutation: RemoveItemFromBasketMutation,
+  ) {}
 
   ngOnInit(): void {
     this.products = this.allProductsQuery
@@ -24,6 +30,15 @@ export class ProductTableComponent implements OnInit {
   }
 
   deleteProduct(product: Product): void {
+    this.removeItemFromBasketMutation
+      .mutate({
+        checkoutID: environment.basketKey,
+        key: product.id,
+      })
+      .subscribe((result) => {
+        console.log(result);
+      });
+
     this.deleteProductMutation
       .mutate({
         key: product.id,
@@ -33,5 +48,11 @@ export class ProductTableComponent implements OnInit {
       });
   }
 
-  onSorted(event: SortEvent): void {}
+  onSorted(event: SortEvent): void {
+    this.products = this.allProductsQuery
+      .watch({
+        orderBy: event.sortExpression,
+      })
+      .valueChanges.pipe(map((result) => CreateProducts(result.data.allProducts)));
+  }
 }

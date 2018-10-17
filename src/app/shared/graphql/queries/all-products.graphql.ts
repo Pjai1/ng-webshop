@@ -7,8 +7,8 @@ import gql from 'graphql-tag';
 })
 export class AllProductsQuery extends Query {
   document = gql`
-    {
-      allProducts {
+    query allProducts($orderBy: String) {
+      allProducts(orderBy: $orderBy) {
         edges {
           node {
             id

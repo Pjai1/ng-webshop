@@ -19,7 +19,11 @@ export class BasketComponent implements OnInit {
   basket: IBasket;
   modalClicked = false;
 
-  constructor(private getBasketQuery: GetBasketQuery, private clearBasketMutation: ClearBasketMutation) {}
+  constructor(
+    private getBasketQuery: GetBasketQuery,
+    private clearBasketMutation: ClearBasketMutation,
+    private apollo: Apollo,
+  ) {}
 
   ngOnInit(): void {
     const defaultBasket: any = { data: { basket: { items: [] } } };

@@ -5,16 +5,18 @@ import gql from 'graphql-tag';
 @Injectable({
   providedIn: 'root',
 })
-export class AddItemToBasketMutation extends Mutation {
+export class RemoveItemFromBasketMutation extends Mutation {
   document = gql`
-    mutation addItemToBasket($key: ID!, $item: BasketItemInput!) {
-      addItemToBasket(input: { checkoutID: $key, item: $item }) {
+    mutation removeItemFromBasket($key: ID!, $productId: Int!) {
+      removeItemFromBasket(input: { checkoutID: $key, productId: $item }) {
         basket {
           checkoutID
           items {
+            id
             product {
               id
             }
+            quantity
           }
         }
       }

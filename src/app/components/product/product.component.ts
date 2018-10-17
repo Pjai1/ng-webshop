@@ -13,8 +13,6 @@ export class ProductComponent implements OnInit {
   @Input()
   product: Product;
   quantity = 1;
-  @Output()
-  addedProduct = new EventEmitter<IBasket>();
 
   constructor(private addItemToBasketMutation: AddItemToBasketMutation) {}
 
@@ -29,6 +27,6 @@ export class ProductComponent implements OnInit {
           productId: this.product.id,
         },
       })
-      .subscribe((result) => (this.addedProduct = result.data.basket));
+      .subscribe((result) => console.log(result));
   }
 }

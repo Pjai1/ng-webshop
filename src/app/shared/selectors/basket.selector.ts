@@ -29,15 +29,17 @@ export function CreateBasket(data: Basket) {
     items: <any>[],
   };
   data.items.forEach((item) => {
-    const newItem: IBasketItem = {
-      id: item.product.id,
-      quantity: item.quantity,
-      price: item.product.price,
-      title: item.product.title,
-      totalPrice: item.product.price * item.quantity,
-    };
-    newBasket.totalPrice += newItem.totalPrice;
-    newBasket.items.push(newItem);
+    if (item.product) {
+      const newItem: IBasketItem = {
+        id: item.product.id,
+        quantity: item.quantity,
+        price: item.product.price,
+        title: item.product.title,
+        totalPrice: item.product.price * item.quantity,
+      };
+      newBasket.totalPrice += newItem.totalPrice;
+      newBasket.items.push(newItem);
+    }
   });
   return newBasket;
 }
