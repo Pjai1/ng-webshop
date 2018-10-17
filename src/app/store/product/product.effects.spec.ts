@@ -1,6 +1,6 @@
 import { cold, hot } from 'jasmine-marbles';
 import * as actions from './product.actions';
-import { ProductService, IProductsDto, IProductDto } from 'src/app/shared/services/product.service';
+import { ProductService, IProductsDto, IProductDto } from '@app/shared/services/product.service';
 import { ProductEffects } from './product.effects';
 import { Actions } from '@ngrx/effects';
 import { of } from 'rxjs';

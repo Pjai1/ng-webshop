@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BasketService, IBasketDto } from 'src/app/shared/services/basket.service';
+import { BasketService, IBasketDto } from '@app/shared/services/basket.service';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';

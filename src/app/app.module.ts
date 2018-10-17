@@ -26,7 +26,7 @@ import { BasketComponent } from './components/basket/basket.component';
 import { SortableColumnComponent } from './shared/components/sortableColumn/sortable-column.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './store';
-import { environment } from 'src/environments/environment';
+import { environment } from '@env/environment';
 import { ProductEffects } from './store/product/product.effects';
 import { FormStateDataDirective } from './shared/directives/formStateData.directive';
 import { BasketEffects } from './store/basket/basket.effects';

@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
-import { IProductDto } from 'src/app/shared/services/product.service';
+import { IProductDto } from '@app/shared/services/product.service';
 import { IBasketItemDto } from './basket.reducers';
-import { IBasketDto } from 'src/app/shared/services/basket.service';
+import { IBasketDto } from '@app/shared/services/basket.service';
 
 export const enum BasketTypes {
   GET_BASKET = 'Get Basket',

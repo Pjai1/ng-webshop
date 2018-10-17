@@ -26,7 +26,7 @@ describe('Basket Service', () => {
   it('should add a product to the basket', async(() => {
     httpClientSpy.post.mockReturnValue(of(expectedBasket));
 
-    service.addToBasket(testProduct, 2).subscribe((basket) => {});
+    service.addToBasket(1, 2).subscribe((basket) => {});
     expect(httpClientSpy.post.mock.calls.length).toBe(1);
   }));
 

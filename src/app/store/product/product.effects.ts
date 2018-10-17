@@ -3,7 +3,7 @@ import { Effect, ofType, Actions } from '@ngrx/effects';
 import { Observable } from 'rxjs';
 import { Action, Store } from '@ngrx/store';
 import { mergeMap, map, switchMap, tap } from 'rxjs/operators';
-import { ProductService } from 'src/app/shared/services/product.service';
+import { ProductService } from '@app/shared/services/product.service';
 import * as fromBasket from '../../store/basket/basket.reducers';
 import {
   GET_PRODUCTS,

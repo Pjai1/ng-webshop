@@ -2,7 +2,6 @@ import * as fromProducts from './product.reducers';
 import * as fromRoot from '../index';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { RouterReducerState } from '@ngrx/router-store';
-import { IProductDto } from 'src/app/shared/services/product.service';
 
 export const getProductsState = createFeatureSelector<fromRoot.State, fromProducts.IState>('products');
 export const getRouterState = createFeatureSelector<fromRoot.State, RouterReducerState>('router');

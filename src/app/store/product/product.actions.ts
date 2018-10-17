@@ -1,5 +1,4 @@
 import { Action } from '@ngrx/store';
-import { IProductDto } from 'src/app/shared/services/product.service';
 import { IProductItemDto } from './product.reducers';
 
 export const GET_PRODUCTS = 'Get Products';

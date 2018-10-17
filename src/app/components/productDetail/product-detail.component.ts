@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import * as fromProduct from '../../store/product/product.reducers';
 import * as fromProductRoot from '../../store/product/index';
 import { Store, select } from '@ngrx/store';
-import { SaveProductAction, DeleteProductAction } from 'src/app/store/product/product.actions';
+import { SaveProductAction, DeleteProductAction } from '@app/store/product/product.actions';
 import { first } from 'rxjs/operators';
 
 @Component({

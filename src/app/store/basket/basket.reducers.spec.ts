@@ -1,6 +1,6 @@
 import * as fromBasket from './basket.reducers';
 import * as fromActions from './basket.actions';
-import { IBasketDto } from 'src/app/shared/services/basket.service';
+import { IBasketDto } from '@app/shared/services/basket.service';
 const deepfreeze = require('deep-freeze');
 
 describe('Basket Reducer', () => {

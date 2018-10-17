@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import * as fromBasket from '../../store/basket/basket.reducers';
-import * as fromBasketRoot from '../../store/basket/index';
-import { DeleteBasketAction, BasketClickedAction } from 'src/app/store/basket/basket.actions';
-import { IBasketDto } from 'src/app/shared/services/basket.service';
+import * as fromBasket from '@app/store/basket/basket.reducers';
+import * as fromBasketRoot from '@app/store/basket/index';
+import { DeleteBasketAction, BasketClickedAction } from '@app/store/basket/basket.actions';
+import { IBasketDto } from '@app/shared/services/basket.service';
 
 @Component({
   selector: 'app-basket',

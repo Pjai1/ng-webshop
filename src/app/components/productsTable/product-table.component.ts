@@ -4,7 +4,7 @@ import * as fromProductRoot from '../../store/product/index';
 import { SortEvent } from '../../shared/components/sortableColumn/sort.service';
 import { Subscription, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { DeleteProductAction, GetProductsAction } from 'src/app/store/product/product.actions';
+import { DeleteProductAction, GetProductsAction } from '@app/store/product/product.actions';
 
 @Component({
   selector: 'app-product-table',

@@ -1,5 +1,4 @@
 import { getProductsEntitiesState, getProductEntitiesState } from '.';
-import { productsReducer } from './product.reducers';
 
 describe('Product Selector', () => {
   let state: any;

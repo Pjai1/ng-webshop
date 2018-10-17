@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import * as fromProduct from '../../store/product/product.reducers';
-import { SaveProductToBasketAction, BasketClickedAction } from 'src/app/store/basket/basket.actions';
+import * as fromProduct from '@app/store/product/product.reducers';
+import { SaveProductToBasketAction, BasketClickedAction } from '@app/store/basket/basket.actions';
 import { Observable } from 'rxjs';
-import * as fromBasketRoot from '../../store/basket/index';
+import * as fromBasketRoot from '@app/store/basket/index';
 
 @Component({
   selector: 'app-product',

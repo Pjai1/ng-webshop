@@ -1,4 +1,4 @@
-import { IBasketDto } from 'src/app/shared/services/basket.service';
+import { IBasketDto } from '@app/shared/services/basket.service';
 import { cold } from 'jasmine-marbles';
 import { BasketEffects } from './basket.effects';
 import { BasketTypes } from './basket.actions';
