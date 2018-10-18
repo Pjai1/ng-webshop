@@ -28,7 +28,7 @@ export class BasketComponent implements OnInit {
   }
 
   onClear(): void {
-    this.clearBasketMutation.mutate().subscribe();
+    this.clearBasketMutation.execute().subscribe((result) => console.log('Basket Cleared ', result));
   }
 
   onProductAdded(basket: IBasket): void {

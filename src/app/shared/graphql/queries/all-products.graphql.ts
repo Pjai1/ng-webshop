@@ -27,10 +27,12 @@ export class AllProductsQuery extends Query {
   `;
 
   public execute(orderBy: string = ''): Observable<ProductConnection> {
-    return this.watch({ orderBy }).valueChanges.pipe(
+    console.log(orderBy);
+    return this.watch({ orderBy: orderBy }).valueChanges.pipe(
       startWith({
         data: { allProducts: emptyProducts },
       }),
+      tap((result) => console.log(result)),
       map((result) => result.data.allProducts || emptyProducts),
     );
   }

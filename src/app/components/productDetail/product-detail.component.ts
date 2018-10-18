@@ -75,8 +75,8 @@ export class ProductDetailComponent implements OnInit {
     if (!productForm.value.basePrice) {
       productForm.value.basePrice = productForm.value.price;
     }
-    console.log('aaa', productForm.value);
-    this.addOrUpdateProductMutation.mutate(productForm.value).subscribe((result) => console.log(result));
+
+    this.addOrUpdateProductMutation.execute(productForm.value).subscribe((result) => this.location.back());
   }
 
   onCancel(): void {

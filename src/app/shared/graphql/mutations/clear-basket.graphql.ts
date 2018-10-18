@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
 })
 export class ClearBasketMutation extends Mutation<ClearBasketPayload> {
   document = gql`
-    mutation clearBasket($checkoutID: String!) {
+    mutation clearBasket($checkoutID: ID!) {
       clearBasket(checkoutID: $checkoutID) {
         basket {
           ...basketFields

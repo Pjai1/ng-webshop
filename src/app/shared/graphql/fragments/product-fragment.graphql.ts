@@ -9,5 +9,7 @@ export const productFragment = gql`
     price
     basePrice
     stocked
+    desc
+    discount @client
   }
 `;

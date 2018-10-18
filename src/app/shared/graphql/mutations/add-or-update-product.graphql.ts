@@ -6,7 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { productFragment } from '../fragments/product-fragment.graphql';
 import { Observable } from 'rxjs';
 import { Product, AddOrUpdateProductPayload } from 'src/graphql-types';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',

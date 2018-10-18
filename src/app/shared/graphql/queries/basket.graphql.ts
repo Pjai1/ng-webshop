@@ -28,7 +28,6 @@ export class GetBasketQuery extends Query<Query> {
       checkoutID: environment.basketKey,
     }).valueChanges.pipe(
       startWith({ data: { basket: emptyBasket } }),
-      tap((result) => console.log(result)),
       map((result) => {
         return result.data.basket || emptyBasket;
       }),

@@ -1,4 +1,4 @@
-import { Basket, BasketItem } from 'src/graphql-types';
+import { Basket, BasketItem, Product } from 'src/graphql-types';
 
 export interface IBasket extends Basket {
   totalPrice: number;
@@ -13,6 +13,14 @@ export const defaults = {};
 
 export const resolvers = {
   Mutation: {},
+  Product: {
+    discount: (product: Product) => {
+      if (product.price && product.basePrice) {
+        return 1 - product.price / product.basePrice;
+      }
+      return 0;
+    },
+  },
   Basket: {
     totalPrice: (basket: Basket) => {
       return basket.items.reduce((acc, item) => {

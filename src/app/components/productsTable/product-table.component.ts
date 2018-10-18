@@ -18,21 +18,17 @@ import { ProductConnection } from 'src/graphql-types';
 export class ProductTableComponent implements OnInit {
   products$: Observable<ProductConnection>;
 
-  constructor(
-    private allProductsQuery: AllProductsQuery,
-    private deleteProductMutation: DeleteProductMutation,
-    private removeItemFromBasketMutation: RemoveItemFromBasketMutation,
-  ) {}
+  constructor(private allProductsQuery: AllProductsQuery, private deleteProductMutation: DeleteProductMutation) {}
 
   ngOnInit(): void {
     this.products$ = this.allProductsQuery.execute();
   }
 
   deleteProduct(product: any): void {
-    this.deleteProductMutation.execute(product.id).subscribe((result) => console.log(result));
+    this.deleteProductMutation.execute(product.id).subscribe((result) => console.log('Deleted Product ', result));
   }
 
   onSorted(event: SortEvent): void {
-    this.allProductsQuery.execute(event.sortExpression);
+    this.products$ = this.allProductsQuery.execute(event.sortExpression);
   }
 }
