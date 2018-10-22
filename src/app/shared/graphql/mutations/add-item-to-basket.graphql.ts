@@ -27,7 +27,7 @@ export class AddItemToBasketMutation extends Mutation {
     console.log(product);
     return this.mutate(
       {
-        checkoutID: environment.basketKey,
+        key: environment.basketKey,
         item: { quantity: quantity, productId: product.id },
       },
       { refetchQueries: ['basket'] },
