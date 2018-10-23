@@ -14,7 +14,6 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((err) => {
-        console.log('hitting this ' + JSON.stringify(err));
         if (err instanceof HttpErrorResponse) {
           if (err.status >= 400 && err.status <= 499) {
             console.error('Error Occurred with status ' + <any>err.status + ' and body ' + JSON.stringify(err));

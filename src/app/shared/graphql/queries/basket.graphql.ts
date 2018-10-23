@@ -3,7 +3,7 @@ import { Query } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { environment } from 'src/environments/environment';
 import { basketFragment } from '../fragments/basket-fragment.graphql';
-import { startWith, map, tap } from 'rxjs/operators';
+import { startWith, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { IBasket } from '../resolvers.graphql';
 

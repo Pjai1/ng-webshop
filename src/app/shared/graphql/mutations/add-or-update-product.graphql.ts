@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Mutation } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { IProduct } from '../../selectors/product.selector';
 import { FormGroup } from '@angular/forms';
 import { productFragment } from '../fragments/product-fragment.graphql';
 import { Observable } from 'rxjs';
 import { Product, AddOrUpdateProductPayload } from 'src/graphql-types';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +23,6 @@ export class AddOrUpdateProductMutation extends Mutation<AddOrUpdateProductPaylo
   `;
 
   public execute(product: FormGroup): Observable<Product> {
-    console.log(product);
     return this.mutate(
       {
         product: product,

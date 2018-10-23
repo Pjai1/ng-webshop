@@ -8,8 +8,6 @@ import IntlPolyfill from 'intl'; // tslint:disable-line
 Intl.NumberFormat = IntlPolyfill.NumberFormat;
 Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
 
-// console.log('Intl', Intl);
-
 //
 //  mock local & session storage
 //

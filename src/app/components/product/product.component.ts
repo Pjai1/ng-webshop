@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { Product } from '../../shared/models/product.model';
-import { AddItemToBasketMutation } from 'src/app/shared/graphql/mutations/add-item-to-basket.graphql';
+import { Component, Input, OnInit } from '@angular/core';
+import { AddItemToBasketMutation, IProduct } from 'src/app/shared/graphql/mutations/add-item-to-basket.graphql';
 
 @Component({
   selector: 'app-product',
@@ -9,7 +8,7 @@ import { AddItemToBasketMutation } from 'src/app/shared/graphql/mutations/add-it
 })
 export class ProductComponent implements OnInit {
   @Input()
-  product: Product;
+  product: IProduct;
   quantity = 1;
 
   constructor(private addItemToBasketMutation: AddItemToBasketMutation) {}
@@ -17,6 +16,6 @@ export class ProductComponent implements OnInit {
   ngOnInit(): void {}
 
   onAddProduct(): void {
-    this.addItemToBasketMutation.execute(this.product, this.quantity);
+    this.addItemToBasketMutation.execute(this.product, this.quantity).subscribe();
   }
 }

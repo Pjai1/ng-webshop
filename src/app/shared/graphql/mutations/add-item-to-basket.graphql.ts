@@ -8,6 +8,10 @@ import { Observable } from 'rxjs';
 import { IBasket } from '../resolvers.graphql';
 import { Product } from 'src/graphql-types';
 
+export interface IProduct extends Product {
+  discount: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -23,11 +27,10 @@ export class AddItemToBasketMutation extends Mutation {
     ${basketFragment}
   `;
 
-  public execute(product: Product, quantity: number): Observable<IBasket> {
-    console.log(product);
+  public execute(product: IProduct, quantity: number): Observable<IBasket> {
     return this.mutate(
       {
-        key: environment.basketKey,
+        checkoutID: environment.basketKey,
         item: { quantity: quantity, productId: product.id },
       },
       { refetchQueries: ['basket'] },

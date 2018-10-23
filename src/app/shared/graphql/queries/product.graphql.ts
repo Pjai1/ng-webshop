@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Query } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { environment } from 'src/environments/environment';
-import { Basket, Product } from 'src/graphql-types';
-import { ApolloQueryResult } from 'apollo-client';
 import { productFragment } from '../fragments/product-fragment.graphql';
+import { Product } from 'src/graphql-types';
 
 interface IProductQuery {
   product: Product;

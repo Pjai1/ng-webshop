@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { CreateProducts, IProduct } from '../../shared/selectors/product.selector';
+import { Observable } from 'rxjs';
 import { AllProductsQuery } from 'src/app/shared/graphql/queries/all-products.graphql';
-import { map } from 'rxjs/operators';
-import { Query, ProductConnection } from 'src/graphql-types';
+import { ProductConnection } from 'src/graphql-types';
 
 @Component({
   selector: 'app-product-grid',

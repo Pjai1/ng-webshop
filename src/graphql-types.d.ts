@@ -23,17 +23,14 @@ export type SubscriptionResolver<Result, Parent = any, Context = any, Args = any
   ): R | Result | Promise<R | Result>;
 };
 
-/** The `Upload` scalar type represents a file upload promise that resolves an object containing `stream`, `filename`, `mimetype` and `encoding`. */
-export type Upload = any;
-
 export interface Query {
   product?: Product | null;
   allProducts?: ProductConnection | null;
-  basket?: Basket | null;
-  user?: User | null;
-  allUsers?: UserConnection | null;
+  basket?: Basket | null /** ### &nbsp;&nbsp;Get the basket with key */;
   task?: Task | null;
   tasks?: (Task | null)[] | null;
+  user?: User | null;
+  allUsers?: UserConnection | null;
 }
 
 export interface Product {
@@ -72,8 +69,15 @@ export interface Basket {
 }
 
 export interface BasketItem {
+  id?: string | null;
   product?: Product | null;
   quantity?: number | null;
+}
+
+export interface Task {
+  id?: number | null;
+  desc?: string | null;
+  completed?: boolean | null;
 }
 
 export interface User {
@@ -106,31 +110,17 @@ export interface UserEdge {
   cursor: string;
 }
 
-export interface Task {
-  id?: number | null;
-  desc?: string | null;
-  completed?: boolean | null;
-}
-
 export interface Mutation {
-  addOrUpdateUser?: AddOrUpdateUserPayload | null;
-  deleteUser?: DeleteUserPayload | null;
-  addOrUpdateProduct?: AddOrUpdateProductPayload | null;
-  deleteProduct?: DeleteProductPayload | null;
-  addItemToBasket?: AddItemToBasketPayload | null;
-  removeItemFromBasket?: RemoveItemFromBasketPayload | null;
-  clearBasket?: ClearBasketPayload | null;
+  addOrUpdateProduct?: AddOrUpdateProductPayload | null /** ### &nbsp;&nbsp;Create/save a product */;
+  deleteProduct?: DeleteProductPayload | null /** ### &nbsp;&nbsp;Remove a product */;
+  addItemToBasket?: AddItemToBasketPayload | null /** ### &nbsp;&nbsp;Add product to basket1. If the product already exist in the basket the quantity is added2. Product not found: 404 error3. Product not in stock: 409 error */;
+  removeItemFromBasket?: RemoveItemFromBasketPayload | null /** ### &nbsp;&nbsp;Remove the product from the basket */;
+  clearBasket?: ClearBasketPayload | null /** ### &nbsp;&nbsp;Empty the basket */;
   addTask?: AddTaskPayload | null;
   completeTask?: CompleteTaskPayload | null;
   deleteTask?: DeleteTaskPayload | null;
-}
-
-export interface AddOrUpdateUserPayload {
-  user?: User | null;
-}
-
-export interface DeleteUserPayload {
-  user?: User | null;
+  addOrUpdateUser?: AddOrUpdateUserPayload | null;
+  deleteUser?: DeleteUserPayload | null;
 }
 
 export interface AddOrUpdateProductPayload {
@@ -165,22 +155,12 @@ export interface DeleteTaskPayload {
   task?: Task | null;
 }
 
-export interface UserInput {
-  id?: number | null;
-  firstName: string;
-  lastName: string;
-  age?: number | null;
-  email: string;
-  image?: string | null;
-  phone?: string | null;
-  company?: string | null;
-  address?: AddressInput | null;
+export interface AddOrUpdateUserPayload {
+  user?: User | null;
 }
 
-export interface AddressInput {
-  street?: string | null;
-  city?: string | null;
-  zip?: string | null;
+export interface DeleteUserPayload {
+  user?: User | null;
 }
 
 export interface ProductInput {
@@ -206,7 +186,25 @@ export interface BasketItemInput {
 
 export interface RemoveItemFromBasketInput {
   checkoutID: string;
-  items: number[];
+  productId: number;
+}
+
+export interface UserInput {
+  id?: number | null;
+  firstName: string;
+  lastName: string;
+  age?: number | null;
+  email: string;
+  image?: string | null;
+  phone?: string | null;
+  company?: string | null;
+  address?: AddressInput | null;
+}
+
+export interface AddressInput {
+  street?: string | null;
+  city?: string | null;
+  zip?: string | null;
 }
 export interface ProductQueryArgs {
   id?: number | null;
@@ -221,6 +219,9 @@ export interface AllProductsQueryArgs {
 export interface BasketQueryArgs {
   checkoutID: string;
 }
+export interface TaskQueryArgs {
+  id?: number | null;
+}
 export interface UserQueryArgs {
   id?: number | null;
 }
@@ -230,15 +231,6 @@ export interface AllUsersQueryArgs {
   after?: string | null;
   before?: string | null;
   last?: number | null;
-}
-export interface TaskQueryArgs {
-  id?: number | null;
-}
-export interface AddOrUpdateUserMutationArgs {
-  input: UserInput;
-}
-export interface DeleteUserMutationArgs {
-  id: number;
 }
 export interface AddOrUpdateProductMutationArgs {
   input: ProductInput;
@@ -264,21 +256,22 @@ export interface CompleteTaskMutationArgs {
 export interface DeleteTaskMutationArgs {
   id: number;
 }
-
-export enum CacheControlScope {
-  PUBLIC = 'PUBLIC',
-  PRIVATE = 'PRIVATE',
+export interface AddOrUpdateUserMutationArgs {
+  input: UserInput;
+}
+export interface DeleteUserMutationArgs {
+  id: number;
 }
 
 export namespace QueryResolvers {
   export interface Resolvers<Context = any> {
     product?: ProductResolver<Product | null, any, Context>;
     allProducts?: AllProductsResolver<ProductConnection | null, any, Context>;
-    basket?: BasketResolver<Basket | null, any, Context>;
-    user?: UserResolver<User | null, any, Context>;
-    allUsers?: AllUsersResolver<UserConnection | null, any, Context>;
+    basket?: BasketResolver<Basket | null, any, Context> /** ### &nbsp;&nbsp;Get the basket with key */;
     task?: TaskResolver<Task | null, any, Context>;
     tasks?: TasksResolver<(Task | null)[] | null, any, Context>;
+    user?: UserResolver<User | null, any, Context>;
+    allUsers?: AllUsersResolver<UserConnection | null, any, Context>;
   }
 
   export type ProductResolver<R = Product | null, Parent = any, Context = any> = Resolver<
@@ -310,6 +303,12 @@ export namespace QueryResolvers {
     checkoutID: string;
   }
 
+  export type TaskResolver<R = Task | null, Parent = any, Context = any> = Resolver<R, Parent, Context, TaskArgs>;
+  export interface TaskArgs {
+    id?: number | null;
+  }
+
+  export type TasksResolver<R = (Task | null)[] | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
   export type UserResolver<R = User | null, Parent = any, Context = any> = Resolver<R, Parent, Context, UserArgs>;
   export interface UserArgs {
     id?: number | null;
@@ -328,13 +327,6 @@ export namespace QueryResolvers {
     before?: string | null;
     last?: number | null;
   }
-
-  export type TaskResolver<R = Task | null, Parent = any, Context = any> = Resolver<R, Parent, Context, TaskArgs>;
-  export interface TaskArgs {
-    id?: number | null;
-  }
-
-  export type TasksResolver<R = (Task | null)[] | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
 }
 
 export namespace ProductResolvers {
@@ -421,12 +413,26 @@ export namespace BasketResolvers {
 
 export namespace BasketItemResolvers {
   export interface Resolvers<Context = any> {
+    id?: IdResolver<string | null, any, Context>;
     product?: ProductResolver<Product | null, any, Context>;
     quantity?: QuantityResolver<number | null, any, Context>;
   }
 
+  export type IdResolver<R = string | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
   export type ProductResolver<R = Product | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
   export type QuantityResolver<R = number | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
+}
+
+export namespace TaskResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<number | null, any, Context>;
+    desc?: DescResolver<string | null, any, Context>;
+    completed?: CompletedResolver<boolean | null, any, Context>;
+  }
+
+  export type IdResolver<R = number | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
+  export type DescResolver<R = string | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
+  export type CompletedResolver<R = boolean | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
 }
 
 export namespace UserResolvers {
@@ -489,50 +495,34 @@ export namespace UserEdgeResolvers {
   export type CursorResolver<R = string, Parent = any, Context = any> = Resolver<R, Parent, Context>;
 }
 
-export namespace TaskResolvers {
-  export interface Resolvers<Context = any> {
-    id?: IdResolver<number | null, any, Context>;
-    desc?: DescResolver<string | null, any, Context>;
-    completed?: CompletedResolver<boolean | null, any, Context>;
-  }
-
-  export type IdResolver<R = number | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
-  export type DescResolver<R = string | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
-  export type CompletedResolver<R = boolean | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
-}
-
 export namespace MutationResolvers {
   export interface Resolvers<Context = any> {
-    addOrUpdateUser?: AddOrUpdateUserResolver<AddOrUpdateUserPayload | null, any, Context>;
-    deleteUser?: DeleteUserResolver<DeleteUserPayload | null, any, Context>;
-    addOrUpdateProduct?: AddOrUpdateProductResolver<AddOrUpdateProductPayload | null, any, Context>;
-    deleteProduct?: DeleteProductResolver<DeleteProductPayload | null, any, Context>;
-    addItemToBasket?: AddItemToBasketResolver<AddItemToBasketPayload | null, any, Context>;
-    removeItemFromBasket?: RemoveItemFromBasketResolver<RemoveItemFromBasketPayload | null, any, Context>;
-    clearBasket?: ClearBasketResolver<ClearBasketPayload | null, any, Context>;
+    addOrUpdateProduct?: AddOrUpdateProductResolver<
+      AddOrUpdateProductPayload | null,
+      any,
+      Context
+    > /** ### &nbsp;&nbsp;Create/save a product */;
+    deleteProduct?: DeleteProductResolver<
+      DeleteProductPayload | null,
+      any,
+      Context
+    > /** ### &nbsp;&nbsp;Remove a product */;
+    addItemToBasket?: AddItemToBasketResolver<
+      AddItemToBasketPayload | null,
+      any,
+      Context
+    > /** ### &nbsp;&nbsp;Add product to basket1. If the product already exist in the basket the quantity is added2. Product not found: 404 error3. Product not in stock: 409 error */;
+    removeItemFromBasket?: RemoveItemFromBasketResolver<
+      RemoveItemFromBasketPayload | null,
+      any,
+      Context
+    > /** ### &nbsp;&nbsp;Remove the product from the basket */;
+    clearBasket?: ClearBasketResolver<ClearBasketPayload | null, any, Context> /** ### &nbsp;&nbsp;Empty the basket */;
     addTask?: AddTaskResolver<AddTaskPayload | null, any, Context>;
     completeTask?: CompleteTaskResolver<CompleteTaskPayload | null, any, Context>;
     deleteTask?: DeleteTaskResolver<DeleteTaskPayload | null, any, Context>;
-  }
-
-  export type AddOrUpdateUserResolver<R = AddOrUpdateUserPayload | null, Parent = any, Context = any> = Resolver<
-    R,
-    Parent,
-    Context,
-    AddOrUpdateUserArgs
-  >;
-  export interface AddOrUpdateUserArgs {
-    input: UserInput;
-  }
-
-  export type DeleteUserResolver<R = DeleteUserPayload | null, Parent = any, Context = any> = Resolver<
-    R,
-    Parent,
-    Context,
-    DeleteUserArgs
-  >;
-  export interface DeleteUserArgs {
-    id: number;
+    addOrUpdateUser?: AddOrUpdateUserResolver<AddOrUpdateUserPayload | null, any, Context>;
+    deleteUser?: DeleteUserResolver<DeleteUserPayload | null, any, Context>;
   }
 
   export type AddOrUpdateProductResolver<R = AddOrUpdateProductPayload | null, Parent = any, Context = any> = Resolver<
@@ -613,22 +603,26 @@ export namespace MutationResolvers {
   export interface DeleteTaskArgs {
     id: number;
   }
-}
 
-export namespace AddOrUpdateUserPayloadResolvers {
-  export interface Resolvers<Context = any> {
-    user?: UserResolver<User | null, any, Context>;
+  export type AddOrUpdateUserResolver<R = AddOrUpdateUserPayload | null, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context,
+    AddOrUpdateUserArgs
+  >;
+  export interface AddOrUpdateUserArgs {
+    input: UserInput;
   }
 
-  export type UserResolver<R = User | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
-}
-
-export namespace DeleteUserPayloadResolvers {
-  export interface Resolvers<Context = any> {
-    user?: UserResolver<User | null, any, Context>;
+  export type DeleteUserResolver<R = DeleteUserPayload | null, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context,
+    DeleteUserArgs
+  >;
+  export interface DeleteUserArgs {
+    id: number;
   }
-
-  export type UserResolver<R = User | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
 }
 
 export namespace AddOrUpdateProductPayloadResolvers {
@@ -693,4 +687,20 @@ export namespace DeleteTaskPayloadResolvers {
   }
 
   export type TaskResolver<R = Task | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
+}
+
+export namespace AddOrUpdateUserPayloadResolvers {
+  export interface Resolvers<Context = any> {
+    user?: UserResolver<User | null, any, Context>;
+  }
+
+  export type UserResolver<R = User | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
+}
+
+export namespace DeleteUserPayloadResolvers {
+  export interface Resolvers<Context = any> {
+    user?: UserResolver<User | null, any, Context>;
+  }
+
+  export type UserResolver<R = User | null, Parent = any, Context = any> = Resolver<R, Parent, Context>;
 }

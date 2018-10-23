@@ -2,16 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { ActivatedRoute } from '@angular/router';
-import { Query, Product } from 'src/graphql-types';
 import { AddOrUpdateProductMutation } from 'src/app/shared/graphql/mutations/add-or-update-product.graphql';
-import { tap, map } from 'rxjs/operators';
 import { GetProductQuery } from 'src/app/shared/graphql/queries/product.graphql';
-import { Observable } from 'rxjs';
-import { IProduct } from 'src/app/shared/selectors/product.selector';
 import { DeleteProductMutation } from 'src/app/shared/graphql/mutations/delete-product.graphql';
+import { Product } from 'src/graphql-types';
 
 @Component({
   selector: 'app-product-detail',
@@ -19,7 +14,7 @@ import { DeleteProductMutation } from 'src/app/shared/graphql/mutations/delete-p
   styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit {
-  product: IProduct;
+  product: Product;
   productForm: FormGroup;
   productId: number;
 

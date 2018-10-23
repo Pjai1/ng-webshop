@@ -26,7 +26,6 @@ import { SortableTableDirective } from './shared/components/sortableColumn/sorta
 import { BasketComponent } from './components/basket/basket.component';
 import { SortableColumnComponent } from './shared/components/sortableColumn/sortable-column.component';
 import { environment } from 'src/environments/environment';
-import { FormStateDataDirective } from './shared/directives/formStateData.directive';
 import { defaults, resolvers } from './shared/graphql/resolvers.graphql';
 
 @NgModule({
@@ -42,7 +41,6 @@ import { defaults, resolvers } from './shared/graphql/resolvers.graphql';
     SortableColumnComponent,
     SortableTableDirective,
     BasketComponent,
-    FormStateDataDirective,
   ],
   imports: [
     RouterModule.forRoot(appRoutes),

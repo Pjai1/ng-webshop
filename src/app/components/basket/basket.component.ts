@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { CreateBasket, ClearBasket } from 'src/app/shared/selectors/basket.selector';
 import { ClearBasketMutation } from 'src/app/shared/graphql/mutations/clear-basket.graphql';
 import { GetBasketQuery } from 'src/app/shared/graphql/queries/basket.graphql';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { IBasket } from 'src/app/shared/graphql/resolvers.graphql';
 
 @Component({
@@ -28,10 +25,6 @@ export class BasketComponent implements OnInit {
   }
 
   onClear(): void {
-    this.clearBasketMutation.execute().subscribe((result) => console.log('Basket Cleared ', result));
-  }
-
-  onProductAdded(basket: IBasket): void {
-    this.basket = CreateBasket(basket);
+    this.clearBasketMutation.execute().subscribe();
   }
 }

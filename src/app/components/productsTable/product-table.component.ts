@@ -1,13 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from '../../shared/models/product.model';
 import { SortEvent } from '../../shared/components/sortableColumn/sort.service';
-import { CreateProducts, IProduct } from 'src/app/shared/selectors/product.selector';
 import { AllProductsQuery } from 'src/app/shared/graphql/queries/all-products.graphql';
 import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
 import { DeleteProductMutation } from 'src/app/shared/graphql/mutations/delete-product.graphql';
-import { RemoveItemFromBasketMutation } from 'src/app/shared/graphql/mutations/remove-item-from-basket';
-import { environment } from 'src/environments/environment';
 import { ProductConnection } from 'src/graphql-types';
 
 @Component({
@@ -25,7 +20,7 @@ export class ProductTableComponent implements OnInit {
   }
 
   deleteProduct(product: any): void {
-    this.deleteProductMutation.execute(product.id).subscribe((result) => console.log('Deleted Product ', result));
+    this.deleteProductMutation.execute(product.id).subscribe();
   }
 
   onSorted(event: SortEvent): void {
