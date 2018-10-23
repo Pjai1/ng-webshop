@@ -20,6 +20,7 @@ export interface IProductItemDto {
   stocked?: boolean;
   image?: string;
   desc?: string;
+  discount?: number;
 }
 
 export interface IState {
