@@ -4,7 +4,6 @@ import * as fromProduct from '@app/store/product/product.reducers';
 import { SaveProductToBasketAction, BasketClickedAction } from '@app/store/basket/basket.actions';
 import { Observable } from 'rxjs';
 import * as fromBasketRoot from '@app/store/basket/index';
-import moment from 'moment';
 
 @Component({
   selector: 'app-product',
@@ -24,8 +23,6 @@ export class ProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.modalClicked$.subscribe((click) => (this.modalClicked = click));
-    const date = moment();
-    console.log(date.format());
   }
 
   onAddProduct(): void {

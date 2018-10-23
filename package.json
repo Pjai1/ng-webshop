@@ -29,7 +29,6 @@
     "deep-freeze": "^0.0.1",
     "jasmine-marbles": "^0.4.0",
     "jquery": "^3.3.1",
-    "moment": "^2.22.2",
     "ngrx-store-freeze": "^0.2.4",
     "ngx-infinite-scroll": "^6.0.1",
     "ngx-toastr": "^9.1.0",
