@@ -27,7 +27,7 @@ export class ClearBasketMutation extends Mutation<ClearBasketPayload> {
       {
         checkoutID: environment.basketKey,
       },
-      { refetchQueries: ['basket'] },
+      // { refetchQueries: ['basket'] },
     ).pipe(map((result) => result.data.clearBasket.basket));
   }
 }

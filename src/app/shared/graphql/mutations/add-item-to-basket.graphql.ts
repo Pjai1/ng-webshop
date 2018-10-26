@@ -17,8 +17,8 @@ export interface IProduct extends Product {
 })
 export class AddItemToBasketMutation extends Mutation {
   document = gql`
-    mutation addItemToBasket($key: ID!, $item: BasketItemInput!) {
-      addItemToBasket(input: { checkoutID: $key, item: $item }) {
+    mutation addItemToBasket($checkoutID: ID!, $item: BasketItemInput!) {
+      addItemToBasket(input: { checkoutID: $checkoutID, item: $item }) {
         basket {
           ...basketFields
         }
